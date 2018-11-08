@@ -70,8 +70,8 @@ module.exports = (sequelize, DataTypes) => {
   
     user.associate = (models) => {
         user.hasMany(models.clothing, { foreignKey: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-        user.hasMany(models.user_realation, { foreignKey: 'id_one', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-        user.hasMany(models.user_realation, { foreignKey: 'id_two', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+        //user.hasMany(models.user_realation, { foreignKey: 'id_one', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+        //user.hasMany(models.user_realation, { foreignKey: 'id_two', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
         user.hasMany(models.comment, { foreignKey: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
         user.hasMany(models.cloth_like_relation, { foreignKey: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
         user.hasMany(models.post_like_relation, { foreignKey: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });

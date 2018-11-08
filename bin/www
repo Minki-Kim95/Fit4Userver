@@ -49,6 +49,19 @@ function normalizePort(val) {
   return false;
 }
 
+// connect To DB 주석 풀고 실행하면 됨
+// const models = require('../models');
+// models.sequelize.sync()
+//   .then(() => {
+//     console.log('✓ DB connection success.');
+//     console.log('  Press CTRL-C to stop\n');
+//   })
+//   .catch(err => {
+//     console.error(err);
+//     console.log('✗ DB connection error. Please make sure DB is running.');
+//     process.exit();
+//   });
+
 /**
  * Event listener for HTTP server "error" event.
  */
