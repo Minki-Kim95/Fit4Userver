@@ -15,26 +15,29 @@ router.get('/index', function(req, res) {
 });
 //login
 router.post('/login', function(req, res, next) {
-  models.User.findOne({
+  console.log("asdfasdfasdf");
+  models.user.findOne({
     where: {
       userid: req.body.userid,
       pw: sha256(req.body.pw)
     }
-  }).then(function(user){
-    if(user !== null) {
-      req.session.user = user;
-      req.session.user.id = user.id;
+  }).then(function(User){
+    console.log("qwer"+User);
+    if(User !== null) {
+      req.session.user = User;
+      req.session.user.id = User.id;
       delete req.body.password;
       res.send({
-        success: true
+        result: true
       });
     } else{
       res.send({
-        success: false
+        result: false
       });
     }
   });
 });
+
 router.get('/logout', function(req, res, next) {
   req.session.user = {};
   delete req.session.user;
