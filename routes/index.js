@@ -15,15 +15,15 @@ router.get('/index', function(req, res) {
 });
 //login
 router.post('/login', function(req, res, next) {
-  models.user.findOne({
+  models.User.findOne({
     where: {
       userid: req.body.userid,
       pw: sha256(req.body.pw)
     }
-  }).then(function(User){
-    if(User !== null) {
-      req.session.user = User;
-      req.session.user.id = User.id;
+  }).then(function(user){
+    if(user !== null) {
+      req.session.user = user;
+      req.session.user.userid = user.userid;
       delete req.body.password;
       res.send({
         success: true
@@ -39,7 +39,17 @@ router.post('/login', function(req, res, next) {
 router.get('/logout', function(req, res, next) {
   req.session.user = {};
   delete req.session.user;
-  
+  if(req.session.user == null){
+    res.send({
+      success: true,
+      msg: 'logout'
+    });
+  }else{
+    res.send({
+      success: false,
+      msg: 'logout fail'
+    });
+  }
 });
 
 router.post('/register', function(req, res, next){
@@ -55,23 +65,36 @@ router.post('/register', function(req, res, next){
           if (obj.hasOwnProperty(key)) size++;
       return size;
   }
-  if (req.body.name.length < 1 || req.body.name.length > 10) result = {
-      success: false,
-      text: '최대 10자리까지 가능합니다.'
-  };
-  if (req.body.userid.length < 1 || req.body.userid.length > 10) result = {
-      success: false,
-      text: '학번의 형식이 아닙니다.'
-  };
-  if (req.body.pw.length < 4 || req.body.pw.length > 10) result = {
+  if (req.body.uname.length < 1 || req.body.uname.length > 10){
+    res.send({
+        success: false,
+        text: '실명은 최대 10자리까지 가능합니다.'
+    });
+  }
+  if (req.body.nickname.length < 1 || req.body.nickname.length > 10){
+    res.send({
+        success: false,
+        text: '닉네임은 최대 10자리까지 가능합니다.'
+    });
+  }
+  if (req.body.userid.length < 1 || req.body.userid.length > 10){
+    res.send({
+        success: false,
+        text: '학번의 형식이 아닙니다.'
+    });
+  }
+  if (req.body.pw.length < 4 || req.body.pw.length > 10){
+    res.send({
       success: false,
       text: '4~10자리 문자열로 입력바랍니다.'
-  };
-  if (!email_regx.test(req.body.email)) result = {
+    });
+  }
+  if (!email_regx.test(req.body.email)){
+    res.send({
       success: false,
       text: '이메일 형식이 아닙니다.'
-  };
-  if (getObjectSize(result) !== 0) res.send(result);
+    });
+  }
   else{
       models.User.findOne({
           where: {
