@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const clothoption = sequelize.define('clothoption', {
+    const Clothoption = sequelize.define('Clothoption', {
       // id: {
       //   type: DataTypes.STRING,
       //   allowNull: false,
@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       topdown: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        comment: '상하의 여부'
+        comment: '상하의 여부 0: 외투, 1: 상의, 2: 하의'
       }
     }, {
       tableName: 'clothoption',
@@ -23,9 +23,9 @@ module.exports = (sequelize, DataTypes) => {
       }
     });
   
-    clothoption.associate = (models) => {
-        clothoption.hasMany(models.clothing, { foreignKey: 'oid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+    Clothoption.associate = (models) => {
+        Clothoption.hasMany(models.Clothing, { foreignKey: 'oid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
     }
-    return clothoption;
+    return Clothoption;
   };
   

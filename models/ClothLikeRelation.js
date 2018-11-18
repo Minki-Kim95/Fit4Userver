@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const cloth_like_relation = sequelize.define('cloth_like_relation', {
+    const Cloth_like_relation = sequelize.define('Cloth_like_relation', {
       // id: {
       //   type: DataTypes.STRING,
       //   allowNull: false,
@@ -23,10 +23,10 @@ module.exports = (sequelize, DataTypes) => {
       }
     });
   
-    cloth_like_relation.associate = (models) => {
-        cloth_like_relation.belongsTo(models.clothing, { foreignKey: 'cid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-        cloth_like_relation.belongsTo(models.user, { foreignKey: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+    Cloth_like_relation.associate = (models) => {
+        Cloth_like_relation.belongsTo(models.Clothing, { foreignKey: 'cid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+        Cloth_like_relation.belongsTo(models.User, { foreignKey: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
     }
-    return cloth_like_relation;
+    return Cloth_like_relation;
   };
   

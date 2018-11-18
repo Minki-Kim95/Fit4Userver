@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const clothing = sequelize.define('clothing', {
+    const Clothing = sequelize.define('Clothing', {
       // id: {
       //   type: DataTypes.STRING,
       //   allowNull: false,
@@ -39,7 +39,22 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
         comment: '옷 판매처 링크'
-      }
+      },
+      photo1: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        comment: '사진1'
+      },
+      photo2: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        comment: '사진2'
+      },
+      photo3: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        comment: '사진3'
+      },
     }, {
       tableName: 'clothing',
       comment: '옷 정보',
@@ -48,13 +63,11 @@ module.exports = (sequelize, DataTypes) => {
       }
     });
   
-    clothing.associate = (models) => {
-        clothing.belongsTo(models.user, { foreignKey: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-        clothing.belongsTo(models.clothoption, { foreignKey: 'oid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-        clothing.hasMany(models.post, { foreignKey: 'top', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-        clothing.hasMany(models.post, { foreignKey: 'down', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-        clothing.hasMany(models.size, { foreignKey: 'cid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+    Clothing.associate = (models) => {
+      Clothing.belongsTo(models.User, { foreignKey: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+      Clothing.belongsTo(models.Clothoption, { foreignKey: 'oid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+      Clothing.hasMany(models.Size, { foreignKey: 'cid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
     }
-    return clothing;
+    return Clothing;
   };
   

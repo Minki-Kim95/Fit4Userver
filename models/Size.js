@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const size = sequelize.define('size', {
+    const Size = sequelize.define('Size', {
       // id: {
       //   type: DataTypes.STRING,
       //   allowNull: false,
@@ -33,9 +33,9 @@ module.exports = (sequelize, DataTypes) => {
       }
     });
   
-    size.associate = (models) => {
-        size.belongsTo(models.clothing, { foreignKey: 'cid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+    Size.associate = (models) => {
+        Size.belongsTo(models.Clothing, { foreignKey: 'cid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
     }
-    return size;
+    return Size;
   };
   

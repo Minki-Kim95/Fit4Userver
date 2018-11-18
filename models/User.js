@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const user = sequelize.define('user', {
+    const User = sequelize.define('User', {
       // id: {
       //   type: DataTypes.STRING,
       //   allowNull: false,
@@ -68,14 +68,14 @@ module.exports = (sequelize, DataTypes) => {
       }
     });
   
-    user.associate = (models) => {
-        user.hasMany(models.clothing, { foreignKey: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-        //user.hasMany(models.user_realation, { foreignKey: 'id_one', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-        //user.hasMany(models.user_realation, { foreignKey: 'id_two', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-        user.hasMany(models.comment, { foreignKey: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-        user.hasMany(models.cloth_like_relation, { foreignKey: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-        user.hasMany(models.post_like_relation, { foreignKey: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+    User.associate = (models) => {
+      User.hasMany(models.Clothing, { foreignKey: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+        //User.hasMany(models.User_realation, { foreignKey: 'id_one', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+        //User.hasMany(models.User_realation, { foreignKey: 'id_two', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+        User.hasMany(models.comment, { foreignKey: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+        User.hasMany(models.Cloth_like_relation, { foreignKey: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+        User.hasMany(models.Post_like_relation, { foreignKey: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
     }
-    return user;
+    return User;
   };
   

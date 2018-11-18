@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const user_relation = sequelize.define('user_relation', {
+    const User_relation = sequelize.define('User_relation', {
       // id: {
       //   type: DataTypes.STRING,
       //   allowNull: false,
@@ -28,10 +28,10 @@ module.exports = (sequelize, DataTypes) => {
       }
     });
   
-    user_relation.associate = (models) => {
-        user_relation.belongsTo(models.user, { foreignKey: 'id_one', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-        user_relation.belongsTo(models.user, { foreignKey: 'id_two', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+    User_relation.associate = (models) => {
+        User_relation.belongsTo(models.User, { foreignKey: 'id_one', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+        User_relation.belongsTo(models.User, { foreignKey: 'id_two', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
     }
-    return user_relation;
+    return User_relation;
   };
   

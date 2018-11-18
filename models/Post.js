@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const post = sequelize.define('post', {
+    const Post = sequelize.define('Post', {
       // id: {
       //   type: DataTypes.STRING,
       //   allowNull: false,
@@ -10,20 +10,15 @@ module.exports = (sequelize, DataTypes) => {
       //   allowNull: false,
       //   comment: '유저 id'
       // },
-      // top: {
-      //   type: DataTypes.INTEGER,
-      //   allowNull: false,
-      //   comment: '옷의 종류(상의)'
-      // },
-      // down: {
-      //   type: DataTypes.INTEGER,
-      //   allowNull: false,
-      //   comment: '옷의 종류(하의)'
-      // },
       hashtag: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
         comment: 'hashtag'
+      },
+      photo: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        comment: 'photo경로'
       }
     }, {
       tableName: 'post',
@@ -33,13 +28,11 @@ module.exports = (sequelize, DataTypes) => {
       }
     });
   
-    post.associate = (models) => {
-        post.belongsTo(models.user, { foreignKey: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-        post.belongsTo(models.clothing, { foreignKey: 'top', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-        post.belongsTo(models.clothing, { foreignKey: 'down', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-        post.hasMany(models.comment, { foreignKey: 'pid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-        post.hasMany(models.post_like_relation, { foreignKey: 'pid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+    Post.associate = (models) => {
+        Post.belongsTo(models.User, { foreignKey: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+        Post.hasMany(models.comment, { foreignKey: 'pid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+        Post.hasMany(models.Post_like_relation, { foreignKey: 'pid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
     }
-    return post;
+    return Post;
   };
   

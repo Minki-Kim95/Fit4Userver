@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const post_like_relation = sequelize.define('post_like_relation', {
+    const Post_like_relation = sequelize.define('Post_like_relation', {
       // id: {
       //   type: DataTypes.STRING,
       //   allowNull: false,
@@ -23,10 +23,10 @@ module.exports = (sequelize, DataTypes) => {
       }
     });
   
-    post_like_relation.associate = (models) => {
-        post_like_relation.belongsTo(models.user, { foreignKey: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-        post_like_relation.belongsTo(models.post, { foreignKey: 'pid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+    Post_like_relation.associate = (models) => {
+        Post_like_relation.belongsTo(models.User, { foreignKey: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+        Post_like_relation.belongsTo(models.Post, { foreignKey: 'pid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
     }
-    return post_like_relation;
+    return Post_like_relation;
   };
   

@@ -29,8 +29,8 @@ module.exports = (sequelize, DataTypes) => {
     });
   
     comment.associate = (models) => {
-        comment.belongsTo(models.user, { foreignKey: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-        comment.belongsTo(models.post, { foreignKey: 'pid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+        comment.belongsTo(models.User, { foreignKey: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+        comment.belongsTo(models.Post, { foreignKey: 'pid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
     }
     return comment;
   };
