@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       uname: {
         type: DataTypes.STRING,
         allowNull: false,
-        comment: '유저 이름'
+        comment: '실명'
       },
       nickname: {
         type: DataTypes.STRING,
