@@ -15,24 +15,22 @@ router.get('/index', function(req, res) {
 });
 //login
 router.post('/login', function(req, res, next) {
-  console.log("asdfasdfasdf");
   models.user.findOne({
     where: {
       userid: req.body.userid,
       pw: sha256(req.body.pw)
     }
   }).then(function(User){
-    console.log("qwer"+User);
     if(User !== null) {
       req.session.user = User;
       req.session.user.id = User.id;
       delete req.body.password;
       res.send({
-        result: true
+        success: true
       });
     } else{
       res.send({
-        result: false
+        success: false
       });
     }
   });
