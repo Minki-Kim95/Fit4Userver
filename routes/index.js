@@ -176,38 +176,34 @@ router.post('/register/modify', function(req, res, next){
   }
 });
 
-//upload fuction
-var upload = function (req, res) {
-  var deferred = Q.defer();
-  var storage = multer.diskStorage({
-    // 서버에 저장할 폴더
-    destination: function (req, file, cb) {
-      cb(null, imagePath);
-    },
-
-    // 서버에 저장할 파일 명
-    filename: function (req, file, cb) {
-      file.uploadedFile = {
-        name: req.params.filename,
-        ext: file.mimetype.split('/')[1]
-      };
-      cb(null, file.uploadedFile.name + '.' + file.uploadedFile.ext);
-    }
-  });
-
-  var upload = multer({ storage: storage }).single('file');
-  upload(req, res, function (err) {
-    if (err) deferred.reject();
-    else deferred.resolve(req.file.uploadedFile);
-  });
-  return deferred.promise;
-};
-
-router.post('/image/:filename', function(req, res, next){
-  upload(req, res).then(function (file) {
-    res.json(file);
-  }, function (err) {
-    res.send(500, err);
+router.post('/upload', function(req, res) {
+	console.log(req.files.image.originalFilename);
+	console.log(req.files.image.path);
+		fs.readFile(req.files.image.path, function (err, data){
+		var dirname = "/home/rajamalw/Node/file-upload";
+		var newPath = dirname + "/uploads/" + 	req.files.image.originalFilename;
+		fs.writeFile(newPath, data, function (err) {
+      if(err){
+      res.json({'response':"Error"});
+      }else {
+      res.json({'response':"Saved"});
+      }
+    });
   });
 });
+
+
+router.get('/uploads/:file', function (req, res){
+  file = req.params.file;
+  console.log(file);
+  var dirname = "C:\Users\SLAVE1\Desktop";
+  //var img = fs.readFileSync(dirname + "/uploads/" + file);
+  //var img = fs.readFileSync(dirname + "\"" + file);
+  var img = fs.readFileSync("C:\Users\SLAVE1\Desktop\jojojo.jpg");
+  console.log(img)
+  res.writeHead(200, {'Content-Type': 'image/jpg' });
+  res.end(img, 'binary');
+});
+
+
 module.exports = router;

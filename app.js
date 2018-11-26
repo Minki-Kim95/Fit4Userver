@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session')
+var connect = require('connect');
 
 var ejs = require('ejs');
 var index = require('./routes/index');
@@ -29,6 +30,17 @@ app.use(session({
   cookie: { maxAge: 3*60*60*1000 } // 세션 유지 3시간
 }));
 
+
+// Configuration
+// app.use(express.static(__dirname + '/public'));
+// app.use(connect.cookieParser());
+// app.use(connect.logger('dev'));
+// app.use(connect.bodyParser());
+
+// app.use(connect.json());
+// app.use(connect.urlencoded());
+
+//routes
 app.use('/', index);
 app.use('/users', users);
 
