@@ -4,6 +4,8 @@ var models = require('../models');
 var sha256 = require('sha256');
 var router = express.Router();
 var mysql = require('mysql');
+var multer = require('multer');
+var upload = multer({ dest: 'uploads/' });
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -176,34 +178,84 @@ router.post('/register/modify', function(req, res, next){
   }
 });
 
-router.post('/upload', function(req, res) {
-	console.log(req.files.image.originalFilename);
-	console.log(req.files.image.path);
-		fs.readFile(req.files.image.path, function (err, data){
-		var dirname = "/home/rajamalw/Node/file-upload";
-		var newPath = dirname + "/uploads/" + 	req.files.image.originalFilename;
-		fs.writeFile(newPath, data, function (err) {
-      if(err){
-      res.json({'response':"Error"});
-      }else {
-      res.json({'response':"Saved"});
-      }
-    });
+router.post('/posts', upload.single('image'), function (req, res, next) {
+
+  console.log("Request Get img upload");
+
+  res.setHeader('Content-Type', 'application/json');
+  res.send(JSON.stringify(
+      { result : "success" }
+  ));
+
+});
+
+router.post('/upload',function(req,res){ 
+
+  console.log("Request upload!");
+  
+  var name = "";
+  var filePath = "";
+  var form = new formidable.IncomingForm();
+  
+  form.parse(req, function(err, fields, files) {
+      name = fields.name;
   });
-});
+  
+  form.on('end', function(fields, files) {
+    for (var i = 0; i < this.openedFiles.length; i++) {
+      var temp_path = this.openedFiles[i].path;
+      var file_name = this.openedFiles[i].name;
+      var index = file_name.indexOf('/'); 
+      var new_file_name = file_name.substring(index + 1);
+       
+      var new_location = 'uploads/'+name+'/';
+  
+      fs.copy(temp_path, new_location + file_name, function(err) { // 이미지 파일 저장하는 부분임
+        if (err) {
+          console.error(err);
+  
+          console.log("upload error!");
+        }
+        else{      
+          res.setHeader('Content-Type', 'application/json');
+          res.send(JSON.stringify({ result : "success", url : new_location+file_name }, null, 3));
+  
+          console.log("upload success!");
+        }
+      });
+    }
+  
+  });
+  });
+
+// router.post('/upload', function(req, res) {
+// 	console.log(req.files.image.originalFilename);
+// 	console.log(req.files.image.path);
+// 		fs.readFile(req.files.image.path, function (err, data){
+// 		var dirname = "/home/rajamalw/Node/file-upload";
+// 		var newPath = dirname + "/uploads/" + 	req.files.image.originalFilename;
+// 		fs.writeFile(newPath, data, function (err) {
+//       if(err){
+//       res.json({'response':"Error"});
+//       }else {
+//       res.json({'response':"Saved"});
+//       }
+//     });
+//   });
+// });
 
 
-router.get('/uploads/:file', function (req, res){
-  file = req.params.file;
-  console.log(file);
-  var dirname = "C:\Users\SLAVE1\Desktop";
-  //var img = fs.readFileSync(dirname + "/uploads/" + file);
-  //var img = fs.readFileSync(dirname + "\"" + file);
-  var img = fs.readFileSync("C:\Users\SLAVE1\Desktop\jojojo.jpg");
-  console.log(img)
-  res.writeHead(200, {'Content-Type': 'image/jpg' });
-  res.end(img, 'binary');
-});
+// router.get('/uploads/:file', function (req, res){
+//   file = req.params.file;
+//   console.log(file);
+//   var dirname = "C:\Users\SLAVE1\Desktop";
+//   //var img = fs.readFileSync(dirname + "/uploads/" + file);
+//   //var img = fs.readFileSync(dirname + "\"" + file);
+//   var img = fs.readFileSync("C:\Users\SLAVE1\Desktop\jojojo.jpg");
+//   console.log(img)
+//   res.writeHead(200, {'Content-Type': 'image/jpg' });
+//   res.end(img, 'binary');
+// });
 
 
 module.exports = router;
