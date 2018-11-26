@@ -4,8 +4,23 @@ var models = require('../models');
 var sha256 = require('sha256');
 var router = express.Router();
 var mysql = require('mysql');
+//multer
 var multer = require('multer');
-var upload = multer({ dest: 'uploads/' });
+var storage = multer.diskStorage({
+  // 서버에 저장할 폴더
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+
+  // 서버에 저장할 파일 명
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+
+var upload = multer({ storage: storage });
+
+// var upload = multer({ dest: 'uploads/' });
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
