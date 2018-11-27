@@ -199,7 +199,7 @@ router.post('/upload', upload.single('image'), function (req, res, next) {
 
   res.setHeader('Content-Type', 'application/json');
   res.send(JSON.stringify(
-      { result : "success" }
+      { success : true, filename : req.file.filename }
   ));
 
 });
