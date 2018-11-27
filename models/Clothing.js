@@ -40,6 +40,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         comment: '옷 판매처 링크'
       },
+      season: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        comment: '계절요소 1:봄, 2:여름, 3:가을, 4:겨울'
+      },
       photo1: {
         type: DataTypes.STRING,
         allowNull: true,

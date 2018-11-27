@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       gender: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        comment: '성별'
+        comment: '성별 (남자:1 여자:2)'
       },
       height: {
         type: DataTypes.INTEGER,
