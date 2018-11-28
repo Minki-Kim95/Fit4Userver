@@ -9,11 +9,14 @@ var multer = require('multer');
 
 var ejs = require('ejs');
 
-//login, logout, register(user)
+//login, logout, upload, loadimage
 var index = require('./routes/index');
+// register user
 var register = require('./routes/register');
 //clothing
 var clothing = require('./routes/clothing');
+//cloth option
+var clothoption = require('./routes/clothoption');
 
 var app = express();
 
@@ -45,6 +48,7 @@ app.use(session({
 app.use('/', index);
 app.use('/register', register);
 app.use('/clothing', clothing);
+app.use('/clothoption', clothoption);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

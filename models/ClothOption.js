@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       topdown: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        comment: '상하의 여부 0: 외투, 1: 상의, 2: 하의'
+        comment: '상하의 여부 0: 외투, 1: 상의, 2: 하의, 3: 한벌옷'
       }
     }, {
       tableName: 'clothoption',
