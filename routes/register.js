@@ -35,19 +35,19 @@ router.post('/', upload.single('image'), function(req, res, next){
         text: '실명은 최대 10자리까지 가능합니다.'
     });
   }
-  if (req.body.nickname.length < 1 || req.body.nickname.length > 10){
+  else if (req.body.nickname.length < 1 || req.body.nickname.length > 10){
     res.send({
         success: false,
         text: '닉네임은 최대 10자리까지 가능합니다.'
     });
   }
-  if (req.body.pw.length < 4 || req.body.pw.length > 10){
+  else if (req.body.pw.length < 4 || req.body.pw.length > 10){
     res.send({
       success: false,
       text: '4~10자리 문자열로 입력바랍니다.'
     });
   }
-  if (!email_regx.test(req.body.email)){
+  else if (!email_regx.test(req.body.email)){
     res.send({
       success: false,
       text: '이메일 형식이 아닙니다.'
@@ -80,7 +80,6 @@ router.post('/', upload.single('image'), function(req, res, next){
 });
 // 회원정보 수정
 router.post('/modify', upload.single('image'), function(req, res, next){
-  console.log(req.body);
   var result = {};
   var num_regx = /^[0-9]*$/;
   var email_regx = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -92,19 +91,19 @@ router.post('/modify', upload.single('image'), function(req, res, next){
         text: '실명은 최대 10자리까지 가능합니다.'
     });
   }
-  if (req.body.nickname.length < 1 || req.body.nickname.length > 10){
+  else if (req.body.nickname.length < 1 || req.body.nickname.length > 10){
     res.send({
         success: false,
         text: '닉네임은 최대 10자리까지 가능합니다.'
     });
   }
-  if (req.body.pw.length < 4 || req.body.pw.length > 10){
+  else if (req.body.pw.length < 4 || req.body.pw.length > 10){
     res.send({
       success: false,
       text: '4~10자리 문자열로 입력바랍니다.'
     });
   }
-  if (!email_regx.test(req.body.email)){
+  else if (!email_regx.test(req.body.email)){
     res.send({
       success: false,
       text: '이메일 형식이 아닙니다.'
@@ -123,7 +122,6 @@ router.post('/modify', upload.single('image'), function(req, res, next){
                 req.body.photo = 'profile/' + req.file.filename;
               else
                 req.body.photo = user.photo;
-              req.body.photo
               user.updateAttributes(req.body).then(function(){
                 result = {
                     success: true
@@ -144,7 +142,6 @@ router.post('/modify', upload.single('image'), function(req, res, next){
 
 //회원정보 삭제
 router.post('/delete', function(req, res, next) {
-  console.log(req.body);
   models.User.findOne({
     where: {
       userid: req.body.userid,
@@ -152,9 +149,10 @@ router.post('/delete', function(req, res, next) {
     }
   }).then(function(user){
     if(user !== null) {
-      user.destroy();
-      res.send({
-        success: true
+      user.destroy().then(function(){
+        res.send({
+          success: true
+        });
       });
     } else{
       res.send({
