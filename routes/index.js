@@ -42,6 +42,7 @@ router.post('/login', function(req, res, next) {
     if(user !== null) {
       req.session.user = user;
       req.session.user.userid = user.userid;
+      req.session.user.id = user.id;
       delete req.body.password;
       res.send({
         success: true
