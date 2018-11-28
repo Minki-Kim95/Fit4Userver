@@ -26,4 +26,33 @@ router.get('/', function(req, res, next) {
     res.send('respond clothing');
   });
 
+router.post('/', upload.fields([{name : 'image1'},{name : 'image2'},{name : 'image3'}] ), function(req, res, next){
+    models.Clothing.findOne({
+        where: {
+            cname: req.body.cname
+        }
+    }).then(function(clothing){
+        if (clothing !== null) {
+
+            if (req.files)
+              req.body.photo = 'clothing/' + req.files.filename;
+            else
+              req.body.photo = user.photo;
+            req.body.photo
+            models.Clothing.create(req.body).then(function(){
+              result = {
+                  success: true
+              };
+              res.send(result);
+            });
+        } else {
+            result = {
+                success: false,
+                text: '이미 존재하는 옷 이름 입니다'
+            };
+            res.send(result);
+        }
+    }); 
+});
+
 module.exports = router;
