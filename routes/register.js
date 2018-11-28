@@ -29,12 +29,6 @@ router.post('/', upload.single('image'), function(req, res, next){
   var email_regx = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   // var image_extention_regx = /\.(gif|jpg|jpeg|tiff|png)$/i;
 
-  function getObjectSize(obj) {
-      var size = 0;
-      for (var key in obj)
-          if (obj.hasOwnProperty(key)) size++;
-      return size;
-  }
   if (req.body.uname.length < 1 || req.body.uname.length > 10){
     res.send({
         success: false,
@@ -92,12 +86,6 @@ router.post('/modify', upload.single('image'), function(req, res, next){
   var email_regx = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   // var image_extention_regx = /\.(gif|jpg|jpeg|tiff|png)$/i;
 
-  function getObjectSize(obj) {
-      var size = 0;
-      for (var key in obj)
-          if (obj.hasOwnProperty(key)) size++;
-      return size;
-  }
   if (req.body.uname.length < 1 || req.body.uname.length > 10){
     res.send({
         success: false,
