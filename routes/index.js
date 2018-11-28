@@ -32,7 +32,6 @@ router.get('/index', function(req, res) {
 
 //login
 router.post('/login', function(req, res, next) {
-  console.log(req.body);
   models.User.findOne({
     where: {
       userid: req.body.userid,
