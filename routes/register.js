@@ -121,8 +121,6 @@ router.post('/modify', upload.single('image'), function(req, res, next){
               req.body.pw = sha256(req.body.pw);
               if (typeof req.file !== 'undefined')
                 req.body.photo = 'profile/' + req.file.filename;
-              else
-                req.body.photo = user.photo;
               user.updateAttributes(req.body).then(function(){
                 result = {
                     success: true
