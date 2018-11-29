@@ -43,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
       season: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        comment: '계절요소 1:봄,가을 2:여름, 3:겨울'
+        comment: '계절요소 0: 공용 1:봄,가을 2:여름, 3:겨울'
       },
       mallname: {
         type: DataTypes.STRING,
