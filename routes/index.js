@@ -59,13 +59,11 @@ router.get('/logout', function(req, res, next) {
   delete req.session.user;
   if(req.session.user == null){
     res.send({
-      success: true,
-      msg: 'logout'
+      success: true
     });
   }else{
     res.send({
-      success: false,
-      msg: 'logout fail'
+      success: false
     });
   }
 });
