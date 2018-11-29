@@ -161,4 +161,21 @@ router.post('/delete', function(req, res, next) {
   });
 });
 
+router.post('/getinfo', (req, res, next) =>{
+  if (typeof req.session.user !== 'undefined'){
+    models.User.findOne({
+      where:{
+        id: req.session.user.id
+      }
+    }).then(function(user){
+      res.send(user);
+    });
+  }else{
+    res.send({
+      success: false,
+      text: "로그인이 안되있습니다"
+  });
+  }
+});
+
 module.exports = router;
