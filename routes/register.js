@@ -175,7 +175,7 @@ router.post('/getinfo', (req, res, next) =>{
     res.send({
       success: false,
       text: "로그인이 안되있습니다"
-  });
+    });
   }
 });
 
