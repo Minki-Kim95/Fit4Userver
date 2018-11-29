@@ -18,7 +18,9 @@ var clothing = require('./routes/clothing');
 //cloth option
 var clothoption = require('./routes/clothoption');
 //post(style)
-var post = require('./routes/post.js');
+var post = require('./routes/post');
+//comment(post에 대한 댓글)
+var comment = require('./routes/comment');
 
 var app = express();
 
@@ -52,6 +54,7 @@ app.use('/register', register);
 app.use('/clothing', clothing);
 app.use('/clothoption', clothoption);
 app.use('/post', post);
+app.use('/comment', comment);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
