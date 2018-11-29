@@ -109,30 +109,63 @@ router.get('/specific/:cid', (req, res, next) =>{
                     where:{
                         cid: req.params.cid
                     }
-                }).then(function(like){
-                    console.log(like[0]);
+                }).then(function(likenum){
                     var i = 0;
-                    while(typeof like[i] !== 'undefined')
+                    while(typeof likenum[i] !== 'undefined')
                         i++;
-                    clothing.like = i;
-                    res.send({
-                        id: clothing.id,
-                        cname: clothing.cname,
-                        views: clothing.views,
-                        hashtag: clothing.hashtag,
-                        cost: clothing.hashtag,
-                        link: clothing.link,
-                        season: clothing.season,
-                        mallname: clothing.mallname,
-                        gender: clothing.gender,
-                        photo1: clothing.photo1,
-                        photo2: clothing.photo2,
-                        photo3: clothing.photo3,
-                        createdAt: clothing.createdAt,
-                        uid: clothing.uid,
-                        oid: clothing.oid,
-                        like: i
-                    });
+                    var islike;
+                    if(typeof req.session.user !== 'undefined'){
+                        models.Cloth_like_relation.findOne({
+                            where:{
+                                cid: req.params.cid,
+                                uid: req.session.user.id
+                            }
+                        }).then(function(like){
+                            if(like !== null)
+                                islike = true;
+                            else
+                                islike = false;
+                            res.send({
+                                id: clothing.id,
+                                cname: clothing.cname,
+                                views: clothing.views,
+                                hashtag: clothing.hashtag,
+                                cost: clothing.cost,
+                                link: clothing.link,
+                                season: clothing.season,
+                                mallname: clothing.mallname,
+                                gender: clothing.gender,
+                                photo1: clothing.photo1,
+                                photo2: clothing.photo2,
+                                photo3: clothing.photo3,
+                                createdAt: clothing.createdAt,
+                                uid: clothing.uid,
+                                oid: clothing.oid,
+                                like: i,
+                                Islike: islike
+                            });
+                        });
+                    }else{
+                        res.send({
+                            id: clothing.id,
+                            cname: clothing.cname,
+                            views: clothing.views,
+                            hashtag: clothing.hashtag,
+                            cost: clothing.cost,
+                            link: clothing.link,
+                            season: clothing.season,
+                            mallname: clothing.mallname,
+                            gender: clothing.gender,
+                            photo1: clothing.photo1,
+                            photo2: clothing.photo2,
+                            photo3: clothing.photo3,
+                            createdAt: clothing.createdAt,
+                            uid: clothing.uid,
+                            oid: clothing.oid,
+                            like: i,
+                            Islike: false
+                        });
+                    }
                 });
             });
         } else {
@@ -249,11 +282,26 @@ router.post('/addlike', (req, res, next) =>{
     //input cid
     if (typeof req.session.user !== 'undefined'){
         req.body.uid = req.session.user.id;
-        models.Cloth_like_relation.create(req.body).then(function(){
-            res.send({
-                success: true
-            });
+        models.Cloth_like_relation.findOne({
+            where:{
+                cid: req.body.cid,
+                uid: req.session.user.id
+            }
+        }).then(function(like){
+            if(like === null){
+                models.Cloth_like_relation.create(req.body).then(function(){
+                    res.send({
+                        success: true
+                    });
+                });
+            }else{
+                res.send({
+                    success: false,
+                    text: "이미 좋아요를 눌렀습니다"
+                });
+            }
         });
+        
     }else{
         res.send({
             success: false,
