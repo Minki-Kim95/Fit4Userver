@@ -168,6 +168,7 @@ router.post('/getinfo', (req, res, next) =>{
         id: req.session.user.id
       }
     }).then(function(user){
+      delete user.pw;
       res.send(user);
     });
   }else{

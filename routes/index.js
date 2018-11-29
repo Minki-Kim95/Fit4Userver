@@ -42,9 +42,10 @@ router.post('/login', function(req, res, next) {
       req.session.user = user;
       req.session.user.userid = user.userid;
       req.session.user.id = user.id;
-      delete req.body.password;
+      delete req.body.pw;
       res.send({
-        success: true
+        success: true,
+        uid : user.id
       });
     } else{
       res.send({
