@@ -395,7 +395,7 @@ router.post('/deletesize', (req, res, next) =>{
     });
 });
 //해당 옷의 사이즈 출력
-router.get('/size/:cid', (req, res, next) =>{
+router.get('/sizes/:cid', (req, res, next) =>{
     models.Size.findAll({
         where: {
             cid: req.params.cid
@@ -407,6 +407,24 @@ router.get('/size/:cid', (req, res, next) =>{
             res.send({
               success: false,
               text: '해당옷의 사이즈 정보가 존재하지 않습니다'
+            });
+        }
+    });
+});
+
+//사이즈 id 의 사이즈 정보 출력
+router.get('/size/:sid', (req, res, next) =>{
+    models.Size.findOne({
+        where: {
+            id: req.params.sid
+        }
+    }).then(function(size){
+        if(size !== null) {
+            res.send(size);
+        } else{
+            res.send({
+              success: false,
+              text: '해당 사이즈 정보가 존재하지 않습니다'
             });
         }
     });

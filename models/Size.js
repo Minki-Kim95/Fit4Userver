@@ -10,10 +10,10 @@ module.exports = (sequelize, DataTypes) => {
     //     allowNull: false,
     //     comment: '옷 id'
     //   },
-      size: {
+      topsize: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        comment: '옷 대표 사이즈'
+        allowNull: true,
+        comment: '상의 사이즈'
       },
       waist: {
         type: DataTypes.INTEGER,
