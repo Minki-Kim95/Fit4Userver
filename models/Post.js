@@ -19,6 +19,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         comment: 'photo경로'
+      },
+      views: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        comment: '조회수'
       }
     }, {
       tableName: 'post',

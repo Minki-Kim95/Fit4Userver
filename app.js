@@ -17,6 +17,8 @@ var register = require('./routes/register');
 var clothing = require('./routes/clothing');
 //cloth option
 var clothoption = require('./routes/clothoption');
+//post(style)
+var post = require('./routes/post.js');
 
 var app = express();
 
@@ -49,6 +51,7 @@ app.use('/', index);
 app.use('/register', register);
 app.use('/clothing', clothing);
 app.use('/clothoption', clothoption);
+app.use('/post', post);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
