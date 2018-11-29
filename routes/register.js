@@ -61,7 +61,8 @@ router.post('/', upload.single('image'), function(req, res, next){
       }).then(function(user){
           if (user === null) {
               req.body.pw = sha256(req.body.pw);
-              req.body.photo = 'profile/'+ req.file.filename;
+              if(typeof req.file !== 'undefined')
+                req.body.photo = 'profile/'+ req.file.filename;
               models.User.create(req.body).then(function(){
                 result = {
                     success: true
@@ -118,7 +119,7 @@ router.post('/modify', upload.single('image'), function(req, res, next){
       }).then(function(user){
           if (user !== null) {
               req.body.pw = sha256(req.body.pw);
-              if (req.file)
+              if (typeof req.file !== 'undefined')
                 req.body.photo = 'profile/' + req.file.filename;
               else
                 req.body.photo = user.photo;
