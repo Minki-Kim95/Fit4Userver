@@ -8,18 +8,13 @@ module.exports = (sequelize, DataTypes) => {
     //   id_one: {
     //     type: DataTypes.STRING,
     //     allowNull: false,
-    //     comment: '유저 id'
+    //     comment: '본인 유저 id'
     //   },
     //   id_two: {
     //     type: DataTypes.STRING,
     //     allowNull: false,
-    //     comment: '유저 id'
-    //   },
-      status: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        comment: '유저 관계(0: 팔로우, 1: 언팔로우)'
-      }
+    //     comment: '대상 유저 id'
+    //   }
     }, {
       tableName: 'user_relation',
       comment: '유저 관계 정보',

@@ -171,12 +171,12 @@ router.post('/getinfo', (req, res, next) =>{
       delete user.pw;
       res.send(user);
     });
-}else{
-    res.send({
-        success: false,
-        text: "로그인이 안되있습니다"
-    });
-}
+  }else{
+      res.send({
+          success: false,
+          text: "로그인이 안되있습니다"
+      });
+  }
   
 });
 

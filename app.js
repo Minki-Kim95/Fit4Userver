@@ -23,6 +23,8 @@ var post = require('./routes/post');
 var comment = require('./routes/comment');
 //wishlist
 var wishlist = require('./routes/wishlist');
+//follow
+var follow = require('./routes/follow')
 
 var app = express();
 
@@ -58,6 +60,7 @@ app.use('/clothoption', clothoption);
 app.use('/post', post);
 app.use('/comment', comment);
 app.use('/wishlist', wishlist);
+app.use('/follow', follow);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
