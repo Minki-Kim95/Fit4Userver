@@ -167,8 +167,16 @@ router.post('/getinfo', (req, res, next) =>{
       id: req.body.uid
     }
   }).then(function(user){
-    delete user.pw;
-    res.send(user);
+    if(user !== null){
+      delete user.pw;
+      res.send(user);
+    }else{
+      res.send({
+        success: false,
+        text: '존재하지 않는 유저입니다.'
+      });
+    }
+    
   });
 });
 
