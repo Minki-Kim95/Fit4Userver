@@ -162,22 +162,22 @@ router.post('/delete', function(req, res, next) {
 });
 
 router.post('/getinfo', (req, res, next) =>{
-  models.User.findOne({
-    where:{
-      id: req.body.uid
-    }
-  }).then(function(user){
-    if(user !== null){
+  if (typeof req.session.user !== 'undefined'){
+    models.User.findOne({
+      where:{
+        id: req.session.user.id
+      }
+    }).then(function(user){
       delete user.pw;
       res.send(user);
-    }else{
-      res.send({
+    });
+}else{
+    res.send({
         success: false,
-        text: '존재하지 않는 유저입니다.'
-      });
-    }
-    
-  });
+        text: "로그인이 안되있습니다"
+    });
+}
+  
 });
 
 module.exports = router;
