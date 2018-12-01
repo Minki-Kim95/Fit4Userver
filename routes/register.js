@@ -3,8 +3,6 @@ var config = require('../config/config.json')[process.env.NODE_ENV || "developme
 var models = require('../models');
 var sha256 = require('sha256');
 var router = express.Router();
-var mysql = require('mysql');
-var fs = require('fs');
 //multer
 var multer = require('multer');
 var storage = multer.diskStorage({
