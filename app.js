@@ -24,6 +24,8 @@ var comment = require('./routes/comment');
 var wishlist = require('./routes/wishlist');
 //follow
 var follow = require('./routes/follow')
+//search
+var search = require('./routes/search');
 
 var app = express();
 
@@ -60,7 +62,7 @@ app.use('/post', post);
 app.use('/comment', comment);
 app.use('/wishlist', wishlist);
 app.use('/follow', follow);
-
+app.use('/search', search);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

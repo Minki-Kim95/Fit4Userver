@@ -23,7 +23,7 @@ router.get('/', function(req, res, next) {
     res.send('respond clothing');
   });
 
-router.post('/', upload.fields([{name : 'image1'},{name : 'image2'},{name : 'image3'}] ), (req, res, next) => {
+router.post('/', upload.fields([{name : 'basicimage'},{name : 'image1'},{name : 'image2'},{name : 'image3'}] ), (req, res, next) => {
     if (req.body.cname.length < 1 || req.body.cname.length > 10){
         res.send({
             success: false,
@@ -57,6 +57,8 @@ router.post('/', upload.fields([{name : 'image1'},{name : 'image2'},{name : 'ima
                     });
                 }else{
                     req.body.uid = req.session.user.id;
+                    if (typeof req.files.basicimage !== 'undefined')
+                        req.body.basicimage = 'clothing/' + req.files.basicimage[0].filename;
                     if (typeof req.files.image1 !== 'undefined')
                         req.body.photo1 = 'clothing/' + req.files.image1[0].filename;
                     if (typeof req.files.image2 !== 'undefined')
@@ -174,7 +176,7 @@ router.get('/specific/:cid', (req, res, next) =>{
         }
     }); 
 });
-router.post('/modify/:cid',upload.fields([{name : 'image1'},{name : 'image2'},{name : 'image3'}] ), (req, res, next)=>{
+router.post('/modify/:cid',upload.fields([{name : 'basicimage'},{name : 'image1'},{name : 'image2'},{name : 'image3'}] ), (req, res, next)=>{
     console.log(req.files);
     if (req.body.cname.length < 1 || req.body.cname.length > 10){
         res.send({
@@ -207,7 +209,8 @@ router.post('/modify/:cid',upload.fields([{name : 'image1'},{name : 'image2'},{n
                         text: "권한이 없거나 로그인이 안되있습니다"
                     });
                 }else{
-                    
+                    if (typeof req.files.basicimage !== 'undefined')
+                        req.body.basicimage = 'clothing/' + req.files.basicimage[0].filename;
                     if (typeof req.files.image1 !== 'undefined')
                         req.body.photo1 = 'clothing/' + req.files.image1[0].filename;
                     if (typeof req.files.image2 !== 'undefined')

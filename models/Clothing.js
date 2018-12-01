@@ -55,6 +55,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         comment: '옷성별 (공용:0 남자:1 여자:2)'
       },
+      basicimage: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        comment: '기본이미지'
+      },
       photo1: {
         type: DataTypes.STRING,
         allowNull: true,
