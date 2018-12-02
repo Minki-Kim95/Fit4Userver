@@ -18,7 +18,7 @@ router.post('/post', (req, res, next)=>{
             //여기서 해당 안되는 거는 삭제를 해주고 나머지를 출력해주면 됨
             //주의 사항: nodejs는 비동기 식이라서 코드가 순서대로 출력이 안되서 앞에서 칼럼을 삭제했다고 뒤에서 삭제된게 반영안됨
             var searcharray = posts;
-
+            var searched = [];
             var word = req.body.string;
             var i = 0;
             console.log(searcharray);
@@ -26,9 +26,12 @@ router.post('/post', (req, res, next)=>{
                 //searcharray[i].hashtag에서 hashtag 정보 가지고 있음
                 //검색어는 word임
                 console.log(searcharray[i].hashtag);
+                var tempt = searcharray[i].hashtag;
+                if(tempt.includes(word))
+                    searched.push(searcharray[i]);
                 i++
             }
-            res.send(searcharray);
+            res.send(searched);
         });
 });
 
@@ -42,17 +45,23 @@ router.post('/clothing', (req, res, next)=>{
             //여기서 해당 안되는 거는 삭제를 해주고 나머지를 출력해주면 됨
             //주의 사항: nodejs는 비동기 식이라서 코드가 순서대로 출력이 안되서 앞에서 칼럼을 삭제했다고 뒤에서 삭제된게 반영안됨
             var searcharray = clothings;
-
-            var word = req.body.string;
+            var searched = [];
+            var word = req.body.string; //검색어 word
             var i = 0;
             console.log(searcharray);
             while (typeof searcharray[i] !== 'undefined'){  //searcharray가 끝날때까지 돌려줌
                 //searcharray[i].hashtag에서 hashtag 정보 가지고 있음
                 //검색어는 word임
                 console.log(searcharray[i].hashtag);
+                var tempt = searcharray[i].hashtag;
+                if(tempt.includes(word))
+                    searched.push(searcharray[i]); 
                 i++
-            }
-            res.send(searcharray);
+            
+            } // 해쉬태그랑 word랑 비교해서 같으면 searcharray[i]를 searched에 넣기
+              // 해쉬태그는 string
+            
+            res.send(searched);
         });
 });
 
