@@ -7,6 +7,16 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
     res.send('respond follow');
 });
+//팔로우된 사람들 리스트
+router.get('/followers/:uid', function(req, res, next) {
+    models.User_relation.findAll({
+        where:{
+          id_two: req.params.uid
+        }
+      }).then(function(relation){
+            res.send(relation);
+      });
+});
 
 router.post('/isfollow', (req, res, next)=>{
     //id_two(uid)
