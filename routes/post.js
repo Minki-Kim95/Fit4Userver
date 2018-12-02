@@ -26,7 +26,7 @@ router.get('/', function(req, res, next) {
     res.send('respond post');
   });
 //post 등록
-router.post('/', upload.single('image'), (req, res, next) => {
+router.post('/', upload.fields([{name : 'clothingimage'},{name : 'avatarimage'}] ), (req, res, next) => {
     //hashtag, image(file)
     if (typeof req.session.user === 'undefined'){
         res.send({
@@ -43,13 +43,14 @@ router.post('/', upload.single('image'), (req, res, next) => {
         else{
             req.body.uid = req.session.user.id;
             req.body.views = 0;
-            if (typeof req.file === 'undefined'){
+            if (typeof req.files === 'undefined'){
                 res.send({
                     success: false,
                     text: '이미지는 필수입니다'
                 });
             }else{
-                req.body.photo = 'post/' + req.file.filename;
+                req.body.clothingimage = 'post/' + req.files.clothingimage[0].filename;
+                req.body.avatarimage = 'post/' + req.files.avatarimage[0].filename;
                 models.Post.create(req.body).then(function(){
                     result = {
                         success: true
@@ -62,7 +63,12 @@ router.post('/', upload.single('image'), (req, res, next) => {
     }
 });
 //해당 옷의 상세 정보
-router.get('/specific/:pid', (req, res, next) =>{
+router.get('/specific/:pid', async function(req, res, next){
+    const numcomment = await models.comment.count({
+        where:{
+            pid: req.params.pid
+        }
+    });
     models.Post.findOne({
         where: {
             id: req.params.pid
@@ -83,6 +89,7 @@ router.get('/specific/:pid', (req, res, next) =>{
                     var i = 0;
                     while(typeof likenum[i] !== 'undefined')
                         i++;
+                    post.dataValues.like = i;
                     if(typeof req.session.user !== 'undefined'){
                         models.Post_like_relation.findOne({
                             where:{
@@ -94,28 +101,15 @@ router.get('/specific/:pid', (req, res, next) =>{
                                 islike = true;
                             else
                                 islike = false;
-                            res.send({
-                                id: post.id,
-                                views: post.views,
-                                hashtag: post.hashtag,
-                                photo: post.photo,
-                                createdAt: post.createdAt,
-                                uid: post.uid,
-                                like: i,
-                                Islike: islike
-                            });
+                            post.dataValues.islike = islike;
+                            post.dataValues.numcomment = numcomment;
+                            res.send(post);
                         });
                     }else{
-                        res.send({
-                            id: post.id,
-                            views: post.views,
-                            hashtag: post.hashtag,
-                            photo: post.photo,
-                            createdAt: post.createdAt,
-                            uid: post.uid,
-                            like: i,
-                            Islike: false
-                        });
+                        islike = false;
+                        post.dataValues.islike = islike;
+                        post.dataValues.numcomment = numcomment;
+                        res.send(post);
                     }
                 });
             });
@@ -273,5 +267,151 @@ router.post('/deletelike', (req, res, next) =>{
         });
     }
 });
+function comparelike(a, b){
+    if (a.dataValues.like < b.dataValues.like)
+        return -1;
+    else if(a.dataValues.like > b.dataValues.like)
+        return 1;
+    else
+        return 0;
+}
+function compareviews(a, b){
+    if (a.dataValues.views < b.dataValues.views)
+        return -1;
+    else if(a.dataValues.views > b.dataValues.views)
+        return 1;
+    else
+        return 0;
+}
+//모든 post 정보 줌
+router.get('/all/:page/:optionnum', async function(req, res, next){
+    // -> page
+    // sortoption => optionnum
+    // 1: Last->normalcase, 2: Most Liked, 3: Most Views
+
+    // 5개씩 보내기
+    // page 별로 1~5, 6~10, 11~15으로 나누기
+    var pagenum = Number(req.params.page);
+    if (pagenum <= 0){
+        res.send({
+            success: false,
+            text: '페이지 넘버를 똑바로 입력하십시오'
+          });
+    }
+    var sortstring = 'id desc';
+    if(!(req.params.optionnum === '0' ||req.params.optionnum === '1' ||req.params.optionnum === '2' || req.params.optionnum === '3')){
+        res.send({
+            success: false,
+            text: 'optionnumber를 똑바로 줘라'
+          });
+    }
+    const num = await models.Post.count({
+     });
+
+    let post = await models.Post.findAll({
+        offset: 5*pagenum - 5,
+        limit: 5*pagenum -1
+     });
+     var i = 0
+     while(typeof post[i] !== 'undefined'){
+        //좋아요 수 찾기
+        const likenum = await models.Post_like_relation.count({
+            where: {
+                pid: post[i].id
+            }
+        });
+        post[i].dataValues.like = likenum;
+        if (typeof req.session.user !== 'undefined'){
+            const likeis = await models.Post_like_relation.findOne({
+                where:{
+                    uid: req.session.user.id
+                }
+            });
+            if(likeis !== null){
+                post[i].dataValues.islike = true;
+            }else if(typeof req.session.user !== 'undefined'){
+                post[i].dataValues.islike = false;
+            }
+        }else{
+            post[i].dataValues.islike = false;
+        }
+        post[i].dataValues.numpost = num;
+        const commentnum = await models.comment.count({
+            where:{
+                pid: post[i].id
+            }
+        });
+        post[i].dataValues.commentnum = commentnum;
+        i++;
+    }
+    //좋아요순 정렬
+    if (req.params.optionnum === '2')
+        await post.sort(comparelike);
+    //조회수순 정렬
+    if (req.params.optionnum === '3')
+        await post.sort(compareviews);
+    
+    res.send(post);
+});
+//유저가 들고있는 post list
+router.get('/user/:page/:uid', async function(req, res, next){
+    // -> page
+    // 5개씩 보내기
+    // page 별로 1~5, 6~10, 11~15으로 나누기
+    var pagenum = Number(req.params.page);
+    if (pagenum <= 0){
+        res.send({
+            success: false,
+            text: '페이지 넘버를 똑바로 입력하십시오'
+          });
+    }
+    const num = await models.Post.count({
+        where:{
+            uid: req.params.uid
+        }
+     });
+
+    let post = await models.Post.findAll({
+        where:{
+            uid: req.params.uid
+        },
+        offset: 5*pagenum - 5,
+        limit: 5*pagenum -1
+     });
+     var i = 0
+     while(typeof post[i] !== 'undefined'){
+        //좋아요 수 찾기
+        const likenum = await models.Post_like_relation.count({
+            where: {
+                pid: post[i].id
+            }
+        });
+        post[i].dataValues.like = likenum;
+        if (typeof req.session.user !== 'undefined'){
+            const likeis = await models.Post_like_relation.findOne({
+                where:{
+                    uid: req.session.user.id
+                }
+            });
+            if(likeis !== null){
+                post[i].dataValues.islike = true;
+            }else if(typeof req.session.user !== 'undefined'){
+                post[i].dataValues.islike = false;
+            }
+        }else{
+            post[i].dataValues.islike = false;
+        }
+        post[i].dataValues.numpost = num;
+        const commentnum = await models.comment.count({
+            where:{
+                pid: post[i].id
+            }
+        });
+        post[i].dataValues.commentnum = commentnum;
+        i++;
+    }
+    res.send(post);
+});
+
 
 module.exports = router;

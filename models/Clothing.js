@@ -87,6 +87,7 @@ module.exports = (sequelize, DataTypes) => {
       Clothing.belongsTo(models.User, { foreignKey: 'uid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
       Clothing.belongsTo(models.Clothoption, { foreignKey: 'oid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
       Clothing.hasMany(models.Size, { foreignKey: 'cid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+      Clothing.hasMany(models.Cloth_like_relation, { foreignKey: 'cid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
     }
     return Clothing;
   };

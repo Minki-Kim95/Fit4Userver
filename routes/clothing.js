@@ -431,6 +431,156 @@ router.get('/size/:sid', (req, res, next) =>{
         }
     });
 });
+function comparelike(a, b){
+    if (a.dataValues.like < b.dataValues.like)
+        return -1;
+    else if(a.dataValues.like > b.dataValues.like)
+        return 1;
+    else
+        return 0;
+}
+function compareviews(a, b){
+    if (a.dataValues.views < b.dataValues.views)
+        return -1;
+    else if(a.dataValues.views > b.dataValues.views)
+        return 1;
+    else
+        return 0;
+}
+//모든 clothing을 일정 규칙으로 정렬하여 보내기
+router.get('/all/:page/:optionnum/:gender/:season', async function(req, res, next){
+    // -> page
+    // sortoption => optionnum
+    // 1: Last->normalcase, 2: Most Liked, 3: Most Views
+
+    // filter: 
+    // gender (0: 공용 1: man, 2: woman)
+    // season (0: 공용 1:봄,가을 2:여름, 3:겨울)
+    // 5개씩 보내기
+    // page 별로 1~5, 6~10, 11~15으로 나누기
+    var pagenum = Number(req.params.page);
+    if (pagenum <= 0){
+        res.send({
+            success: false,
+            text: '페이지 넘버를 똑바로 입력하십시오'
+          });
+    }
+    var sortstring = 'id desc';
+    if(!(req.params.optionnum === '0' ||req.params.optionnum === '1' ||req.params.optionnum === '2' || req.params.optionnum === '3')){
+        res.send({
+            success: false,
+            text: 'optionnumber를 똑바로 줘라'
+          });
+    }
+    const num = await models.Clothing.count({
+        where:{
+            gender: req.params.gender,
+            season: req.params.season
+        }
+     });
+
+    let clothing = await models.Clothing.findAll({
+        where:{
+            gender: req.params.gender,
+            season: req.params.season
+        },
+        attributes: ['id', 'cname', 'views', 'hashtag', 'cost',
+         'link', 'season', 'mallname', 'gender', 'basicimage',
+          'photo1', 'photo2', 'photo3', 'createdAt', 'uid', 'oid'],
+        offset: 5*pagenum - 5,
+        limit: 5*pagenum -1
+     });
+     var i = 0
+     while(typeof clothing[i] !== 'undefined'){
+        //좋아요 수 찾기
+        const likenum = await models.Cloth_like_relation.count({
+            where: {
+                cid: clothing[i].id
+            }
+        });
+        clothing[i].dataValues.like = likenum;
+        if (typeof req.session.user !== 'undefined'){
+            const likeis = await models.Cloth_like_relation.findOne({
+                where:{
+                    uid: req.session.user.id
+                }
+            });
+            if(likeis !== null){
+                clothing[i].dataValues.islike = true;
+            }else if(typeof req.session.user !== 'undefined'){
+                clothing[i].dataValues.islike = false;
+            }
+        }else{
+            clothing[i].dataValues.islike = false;
+        }
+        clothing[i].dataValues.numclothing = num;
+            i++;
+    }
+    //좋아요순 정렬
+    if (req.params.optionnum === '2')
+        await clothing.sort(comparelike);
+    //조회수순 정렬
+    if (req.params.optionnum === '3')
+        await clothing.sort(compareviews);
+    
+    res.send(clothing);
+});
+//유저가 들고있는 clothing list
+router.get('/user/:page/:uid', async function(req, res, next){
+    // -> page
+    // 5개씩 보내기
+    // page 별로 1~5, 6~10, 11~15으로 나누기
+    var pagenum = Number(req.params.page);
+    if (pagenum <= 0){
+        res.send({
+            success: false,
+            text: '페이지 넘버를 똑바로 입력하십시오'
+          });
+    }
+    const num = await models.Clothing.count({
+        where:{
+            uid: req.params.uid
+        }
+     });
+    let clothing = await models.Clothing.findAll({
+        where:{
+            uid: req.params.uid
+        },
+        attributes: ['id', 'cname', 'views', 'hashtag', 'cost',
+         'link', 'season', 'mallname', 'gender', 'basicimage',
+          'photo1', 'photo2', 'photo3', 'createdAt', 'uid', 'oid'],
+        offset: 5*pagenum - 4,
+        limit: 5*pagenum
+     });
+     var i = 0
+     while(typeof clothing[i] !== 'undefined'){
+        //좋아요 수 찾기
+        const likenum = await models.Cloth_like_relation.count({
+            where: {
+                cid: clothing[i].id
+            }
+        });
+        clothing[i].dataValues.like = likenum;
+        if (typeof req.session.user !== 'undefined'){
+            const likeis = await models.Cloth_like_relation.findOne({
+                where:{
+                    uid: req.session.user.id
+                }
+            });
+            if(likeis !== null){
+                clothing[i].dataValues.islike = true;
+            }else if(typeof req.session.user !== 'undefined'){
+                clothing[i].dataValues.islike = false;
+            }
+        }else{
+            clothing[i].dataValues.islike = false;
+        }
+        clothing[i].dataValues.numclothing = num;
+        i++;
+    }
+
+    res.send(clothing);
+});
 
 
 

@@ -15,10 +15,15 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         comment: 'hashtag'
       },
-      photo: {
+      clothingimage: {
         type: DataTypes.STRING,
         allowNull: false,
-        comment: 'photo경로'
+        comment: '옷사진 경로'
+      },
+      avatarimage: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        comment: '아바타사진 경로'
       },
       views: {
         type: DataTypes.INTEGER,
