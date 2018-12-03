@@ -446,17 +446,17 @@ router.get('/size/:sid', (req, res, next) =>{
 });
 function comparelike(a, b){
     if (a.dataValues.like < b.dataValues.like)
-        return -1;
-    else if(a.dataValues.like > b.dataValues.like)
         return 1;
+    else if(a.dataValues.like > b.dataValues.like)
+        return -1;
     else
         return 0;
 }
 function compareviews(a, b){
     if (a.dataValues.views < b.dataValues.views)
-        return -1;
-    else if(a.dataValues.views > b.dataValues.views)
         return 1;
+    else if(a.dataValues.views > b.dataValues.views)
+        return -1;
     else
         return 0;
 }
@@ -499,9 +499,7 @@ router.get('/all/:page/:optionnum/:gender/:season', async function(req, res, nex
         },
         attributes: ['id', 'cname', 'views', 'hashtag', 'cost',
          'link', 'season', 'mallname', 'gender', 'basicimage',
-          'photo1', 'photo2', 'photo3', 'createdAt', 'uid', 'oid'],
-        offset: 5*pagenum - 5,
-        limit: 5*pagenum
+          'photo1', 'photo2', 'photo3', 'createdAt', 'uid', 'oid']
      });
      var i = 0
      while(typeof clothing[i] !== 'undefined'){
@@ -535,8 +533,12 @@ router.get('/all/:page/:optionnum/:gender/:season', async function(req, res, nex
     //조회수순 정렬
     if (req.params.optionnum === '3')
         await clothing.sort(compareviews);
+
+    let clothingset = [];
+    for (i = 5*pagenum - 5; i < 5*pagenum; i++)
+        clothingset.push(clothing[i]);
     
-    res.send(clothing);
+    res.send(clothingset);
 });
 //유저가 들고있는 clothing list
 router.get('/user/:page/:uid', async function(req, res, next){

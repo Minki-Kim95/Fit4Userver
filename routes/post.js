@@ -282,17 +282,17 @@ router.get('/likelist/:pid', async function(req, res, next) {
   });
 function comparelike(a, b){
     if (a.dataValues.like < b.dataValues.like)
-        return -1;
-    else if(a.dataValues.like > b.dataValues.like)
         return 1;
+    else if(a.dataValues.like > b.dataValues.like)
+        return -1;
     else
         return 0;
 }
 function compareviews(a, b){
     if (a.dataValues.views < b.dataValues.views)
-        return -1;
-    else if(a.dataValues.views > b.dataValues.views)
         return 1;
+    else if(a.dataValues.views > b.dataValues.views)
+        return -1;
     else
         return 0;
 }
@@ -322,8 +322,6 @@ router.get('/all/:page/:optionnum', async function(req, res, next){
      });
 
     let post = await models.Post.findAll({
-        offset: 5*pagenum - 5,
-        limit: 5*pagenum
      });
      var i = 0
      while(typeof post[i] !== 'undefined'){
@@ -363,8 +361,12 @@ router.get('/all/:page/:optionnum', async function(req, res, next){
     //조회수순 정렬
     if (req.params.optionnum === '3')
         await post.sort(compareviews);
+
+    let postgset = [];
+    for (i = 5*pagenum - 5; i < 5*pagenum; i++)
+    postgset.push(post[i]);
     
-    res.send(post);
+    res.send(postgset);
 });
 //유저가 들고있는 post list
 router.get('/user/:page/:uid', async function(req, res, next){
