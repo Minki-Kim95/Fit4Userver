@@ -25,6 +25,16 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         comment: '아바타사진 경로'
       },
+      title: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        comment: 'post이름'
+      },
+      totalcost: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        comment: '총 금액'
+      },
       views: {
         type: DataTypes.INTEGER,
         allowNull: false,

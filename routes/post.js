@@ -267,6 +267,19 @@ router.post('/deletelike', (req, res, next) =>{
         });
     }
 });
+//좋아요 리스트 출력
+router.get('/likelist/:pid', async function(req, res, next) {
+    var likelist = await models.Post_like_relation.findAll({
+        where: {
+            pid: req.params.pid
+        },
+        include:{
+            model: models.User,
+            attributes: ['uname', 'nickname', 'photo']
+        }
+    });
+    res.send(likelist);
+  });
 function comparelike(a, b){
     if (a.dataValues.like < b.dataValues.like)
         return -1;
@@ -283,6 +296,7 @@ function compareviews(a, b){
     else
         return 0;
 }
+
 //모든 post 정보 줌
 router.get('/all/:page/:optionnum', async function(req, res, next){
     // -> page

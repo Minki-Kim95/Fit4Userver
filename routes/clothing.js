@@ -341,6 +341,19 @@ router.post('/deletelike', (req, res, next) =>{
         });
     }
 });
+//좋아요 누른사람 리스트
+router.get('/likelist/:cid', async function(req, res, next) {
+    var likelist = await models.Cloth_like_relation.findAll({
+        where: {
+            cid: req.params.cid
+        },
+        include:{
+            model: models.User,
+            attributes: ['uname', 'nickname', 'photo']
+        }
+    });
+    res.send(likelist);
+  });
 /*사이즈 정보 처리*/
 //사이즈 추가
 router.post('/addsize', (req, res, next) =>{
