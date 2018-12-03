@@ -501,7 +501,7 @@ router.get('/all/:page/:optionnum/:gender/:season', async function(req, res, nex
          'link', 'season', 'mallname', 'gender', 'basicimage',
           'photo1', 'photo2', 'photo3', 'createdAt', 'uid', 'oid'],
         offset: 5*pagenum - 5,
-        limit: 5*pagenum -1
+        limit: 5*pagenum
      });
      var i = 0
      while(typeof clothing[i] !== 'undefined'){
@@ -562,7 +562,7 @@ router.get('/user/:page/:uid', async function(req, res, next){
         attributes: ['id', 'cname', 'views', 'hashtag', 'cost',
          'link', 'season', 'mallname', 'gender', 'basicimage',
           'photo1', 'photo2', 'photo3', 'createdAt', 'uid', 'oid'],
-        offset: 5*pagenum - 4,
+        offset: 5*pagenum - 5,
         limit: 5*pagenum
      });
      var i = 0

@@ -312,7 +312,6 @@ router.get('/all/:page/:optionnum', async function(req, res, next){
             text: '페이지 넘버를 똑바로 입력하십시오'
           });
     }
-    var sortstring = 'id desc';
     if(!(req.params.optionnum === '0' ||req.params.optionnum === '1' ||req.params.optionnum === '2' || req.params.optionnum === '3')){
         res.send({
             success: false,
@@ -324,7 +323,7 @@ router.get('/all/:page/:optionnum', async function(req, res, next){
 
     let post = await models.Post.findAll({
         offset: 5*pagenum - 5,
-        limit: 5*pagenum -1
+        limit: 5*pagenum
      });
      var i = 0
      while(typeof post[i] !== 'undefined'){
@@ -390,7 +389,7 @@ router.get('/user/:page/:uid', async function(req, res, next){
             uid: req.params.uid
         },
         offset: 5*pagenum - 5,
-        limit: 5*pagenum -1
+        limit: 5*pagenum
      });
      var i = 0
      while(typeof post[i] !== 'undefined'){
