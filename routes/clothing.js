@@ -142,7 +142,7 @@ router.get('/specific/:cid', (req, res, next) =>{
                                 uid: clothing.uid,
                                 oid: clothing.oid,
                                 like: i,
-                                Islike: islike
+                                islike: islike
                             });
                         });
                     }else{
@@ -164,7 +164,7 @@ router.get('/specific/:cid', (req, res, next) =>{
                             uid: clothing.uid,
                             oid: clothing.oid,
                             like: i,
-                            Islike: false
+                            islike: false
                         });
                     }
                 });
