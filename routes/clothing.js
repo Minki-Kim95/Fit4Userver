@@ -24,10 +24,10 @@ router.get('/', function(req, res, next) {
   });
 
 router.post('/', upload.fields([{name : 'basicimage'},{name : 'image1'},{name : 'image2'},{name : 'image3'}] ), (req, res, next) => {
-    if (req.body.cname.length < 1 || req.body.cname.length > 10){
+    if (req.body.cname.length < 1 || req.body.cname.length > 20){
         res.send({
             success: false,
-            text: '옷 이름은 10자까지 가능합니다'
+            text: '옷 이름은 20자까지 가능합니다'
         });
     }
     else if (req.body.hashtag.length < 1 || req.body.hashtag.length > 255){
