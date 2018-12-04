@@ -39,6 +39,46 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         comment: '조회수'
+      },
+        top_outer: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        comment: '아우터의 정보'
+      },
+      top_1: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        comment: '안에 입을옷'
+      },
+      top_2: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        comment: '바깥에 입을 옷'
+      },
+      down: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        comment: '하의 정보'
+      },
+      top_outer_size: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        comment: '아우터의 사이즈'
+      },
+      top_1_size: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        comment: '안에 입을옷'
+      },
+      top_2_size: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        comment: '바깥에 입을 옷'
+      },
+      down_size: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        comment: '하의 정보'
       }
     }, {
       tableName: 'post',
