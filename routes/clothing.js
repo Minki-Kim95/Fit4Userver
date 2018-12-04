@@ -539,7 +539,7 @@ router.get('/all/:page/:optionnum/:gender/:season', async function(req, res, nex
 
     let clothingset = [];
     for (i = 5*pagenum - 5; i < 5*pagenum; i++){
-        if(clothin[i] !== null)
+        if(clothing[i] !== null)
             clothingset.push(clothing[i]);
     }
     res.send(clothingset);
