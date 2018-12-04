@@ -335,7 +335,8 @@ router.get('/all/:page/:optionnum', async function(req, res, next){
         if (typeof req.session.user !== 'undefined'){
             const likeis = await models.Post_like_relation.findOne({
                 where:{
-                    uid: req.session.user.id
+                    uid: req.session.user.id,
+                    pid: post[i].id
                 }
             });
             if(likeis !== null){
@@ -405,7 +406,8 @@ router.get('/user/:page/:uid', async function(req, res, next){
         if (typeof req.session.user !== 'undefined'){
             const likeis = await models.Post_like_relation.findOne({
                 where:{
-                    uid: req.session.user.id
+                    uid: req.session.user.id,
+                    pid: post[i].id
                 }
             });
             if(likeis !== null){

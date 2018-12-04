@@ -509,11 +509,14 @@ router.get('/all/:page/:optionnum/:gender/:season', async function(req, res, nex
                 cid: clothing[i].id
             }
         });
+        if (clothing[i].id === 9)
+            console.log(likenum);
         clothing[i].dataValues.like = likenum;
         if (typeof req.session.user !== 'undefined'){
             const likeis = await models.Cloth_like_relation.findOne({
                 where:{
-                    uid: req.session.user.id
+                    uid: req.session.user.id,
+                    cid: clothing[i].id
                 }
             });
             if(likeis !== null){
@@ -579,7 +582,8 @@ router.get('/user/:page/:uid', async function(req, res, next){
         if (typeof req.session.user !== 'undefined'){
             const likeis = await models.Cloth_like_relation.findOne({
                 where:{
-                    uid: req.session.user.id
+                    uid: req.session.user.id,
+                    cid: clothing[i].id
                 }
             });
             if(likeis !== null){
