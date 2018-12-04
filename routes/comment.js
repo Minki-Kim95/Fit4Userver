@@ -65,6 +65,10 @@ router.get('/get/:pid', (req, res, next)=>{
     models.comment.findAll({
         where: {
             pid: req.params.pid
+        },
+        include:{
+            model: models.User,
+            attributes: ['nickname']
         }
     }).then(function(comments){
         if(typeof comments[0] !== 'undefined'){
