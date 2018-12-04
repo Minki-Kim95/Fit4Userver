@@ -103,7 +103,7 @@ router.get('/getoption/:id', (req, res, next) => {
         where: {
             id: req.params.id
         },
-        attributes: ['id', 'oname']
+        attributes: ['id', 'oname', 'topdown']
     }).then(function(option){
         if(option !== null){
             res.send(option);
