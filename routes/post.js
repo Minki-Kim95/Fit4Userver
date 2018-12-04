@@ -93,7 +93,10 @@ router.get('/specific/:pid', async function(req, res, next){
                     id: post.top_outer
                 }
             });
-            post.dataValues.top_outer_name = to.cname;
+            if (to !== null){
+                post.dataValues.top_outer_name = to.cname;
+                post.dataValues.top_outer_mall = to.mallname;
+            }
         }
         if(post.top_1 !==null){
             const t1 = await models.Clothing.findOne({
@@ -101,7 +104,11 @@ router.get('/specific/:pid', async function(req, res, next){
                     id: post.top_1
                 }
             });
-            post.dataValues.top_1_name = t1.cname;
+            if (t1 !==null){
+                post.dataValues.top_1_name = t1.cname;
+                post.dataValues.top_1_mall = t1.mallname;
+            }
+
         }
         if(post.top_2 !==null){
             const t2 = await models.Clothing.findOne({
@@ -109,7 +116,11 @@ router.get('/specific/:pid', async function(req, res, next){
                     id: post.top_2
                 }
             });
-            post.dataValues.top_2_name = t2.cname;
+            if (t2 !== null){
+                post.dataValues.top_2_name = t2.cname;
+                post.dataValues.top_2_mall = t2.mallname;
+            }
+
         }
         if(post.down !==null){
             const dw = await models.Clothing.findOne({
@@ -117,7 +128,11 @@ router.get('/specific/:pid', async function(req, res, next){
                     id: post.down
                 }
             });
-            post.dataValues.down_name = dw.cname;
+            if (dw !== null){
+                post.dataValues.down_name = dw.cname;
+                post.dataValues.down_mall = dw.mallname;
+            }
+
         }
         const user = await models.User.findOne({
             where:{
