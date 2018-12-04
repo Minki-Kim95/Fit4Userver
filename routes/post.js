@@ -69,58 +69,90 @@ router.get('/specific/:pid', async function(req, res, next){
             pid: req.params.pid
         }
     });
-    models.Post.findOne({
+    let post = await models.Post.findOne({
         where: {
             id: req.params.pid
         }
-     }).then(function(post){
-        if (post !== null) {
-            models.Post.update(
-                {views: post.views + 1},
-                {where: {
-                    id: req.params.pid
-                }}
-            ).then(function(){
-                models.Post_like_relation.findAll({
-                    where:{
-                        pid: req.params.pid
-                    }
-                }).then(function(likenum){
-                    var i = 0;
-                    while(typeof likenum[i] !== 'undefined')
-                        i++;
-                    post.dataValues.like = i;
-                    if(typeof req.session.user !== 'undefined'){
-                        models.Post_like_relation.findOne({
-                            where:{
-                                pid: req.params.pid,
-                                uid: req.session.user.id
-                            }
-                        }).then(function(like){
-                            if(like !== null)
-                                islike = true;
-                            else
-                                islike = false;
-                            post.dataValues.islike = islike;
-                            post.dataValues.numcomment = numcomment;
-                            res.send(post);
-                        });
-                    }else{
-                        islike = false;
-                        post.dataValues.islike = islike;
-                        post.dataValues.numcomment = numcomment;
-                        res.send(post);
-                    }
-                });
+     });
+    if (post !== null) {
+        await models.Post.update(
+            {views: post.views + 1},
+            {where: {
+                id: req.params.pid
+            }}
+        );
+        const likenum = await models.Post_like_relation.count({
+            where:{
+                pid: req.params.pid
+            }
+        });
+        post.dataValues.like = likenum;
+        if(post.top_outer !==null){
+            const to = await models.Clothing.findOne({
+                where:{
+                    id: post.top_outer
+                }
             });
-        } else {
-            result = {
-                success: false,
-                text: '존재하지 않는 스타일 정보입니다'
-            };
-            res.send(result);
+            post.dataValues.top_outer_name = to.cname;
         }
-    }); 
+        if(post.top_1 !==null){
+            const t1 = await models.Clothing.findOne({
+                where:{
+                    id: post.top_1
+                }
+            });
+            post.dataValues.top_1_name = t1.cname;
+        }
+        if(post.top_2 !==null){
+            const t2 = await models.Clothing.findOne({
+                where:{
+                    id: post.top_2
+                }
+            });
+            post.dataValues.top_2_name = t2.cname;
+        }
+        if(post.down !==null){
+            const dw = await models.Clothing.findOne({
+                where:{
+                    id: post.down
+                }
+            });
+            post.dataValues.down_name = dw.cname;
+        }
+        const user = await models.User.findOne({
+            where:{
+                id: post.uid
+            }
+        });
+        post.dataValues.height = user.height;
+        post.dataValues.weight = user.weight;
+        if(typeof req.session.user !== 'undefined'){
+            const like = await models.Post_like_relation.findOne({
+                where:{
+                    pid: req.params.pid,
+                    uid: req.session.user.id
+                }
+            });
+            if(like !== null)
+                islike = true;
+            else
+                islike = false;
+            post.dataValues.islike = islike;
+            post.dataValues.numcomment = numcomment;
+            res.send(post);
+        }else{
+            islike = false;
+            post.dataValues.islike = islike;
+            post.dataValues.numcomment = numcomment;
+            res.send(post);
+        }
+    } else {
+        result = {
+            success: false,
+            text: '존재하지 않는 스타일 정보입니다'
+        };
+        res.send(result);
+    }
 });
 router.post('/modify/:pid',upload.single('image'), (req, res, next)=>{
     if (typeof req.session.user === 'undefined'){
@@ -354,6 +386,14 @@ router.get('/all/:page/:optionnum', async function(req, res, next){
             }
         });
         post[i].dataValues.commentnum = commentnum;
+        //키 몸무게
+        const user = await models.User.findOne({
+            where:{
+                id: post[i].uid
+            }
+        });
+        post[i].dataValues.height = user.height;
+        post[i].dataValues.weight = user.weight;
         i++;
     }
     //좋아요순 정렬
