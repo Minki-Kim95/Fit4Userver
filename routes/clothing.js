@@ -538,9 +538,10 @@ router.get('/all/:page/:optionnum/:gender/:season', async function(req, res, nex
         await clothing.sort(compareviews);
 
     let clothingset = [];
-    for (i = 5*pagenum - 5; i < 5*pagenum; i++)
-        clothingset.push(clothing[i]);
-    
+    for (i = 5*pagenum - 5; i < 5*pagenum; i++){
+        if(clothin[i] !== null)
+            clothingset.push(clothing[i]);
+    }
     res.send(clothingset);
 });
 //유저가 들고있는 clothing list

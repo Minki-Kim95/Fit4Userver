@@ -364,8 +364,11 @@ router.get('/all/:page/:optionnum', async function(req, res, next){
         await post.sort(compareviews);
 
     let postgset = [];
-    for (i = 5*pagenum - 5; i < 5*pagenum; i++)
-    postgset.push(post[i]);
+    for (i = 5*pagenum - 5; i < 5*pagenum; i++){
+        if(post[i] !== null)
+            postgset.push(post[i]);
+    }
+        
     
     res.send(postgset);
 });
