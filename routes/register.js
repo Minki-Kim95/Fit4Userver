@@ -166,12 +166,10 @@ router.post('/getinfo', (req, res, next) =>{
         id: req.session.user.id
       },
       attributes: ['id', 'userid', 'uname', 
-      'nickname', 'gender', 'height', 'topsize', 
-      'waist', 'weight', 'photo', 'intro', 
+      'nickname', 'gender', 'height', 'shoulder','topsize', 
+      'down_length','waist', 'weight', 'photo', 'intro', 
       'email', 'createdAt']
     }).then(function(user){
-      console.log(user);
-      delete user.pw;
       res.send(user);
     });
   }else{

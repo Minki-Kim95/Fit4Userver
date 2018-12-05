@@ -40,7 +40,16 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         comment: '상의 사이즈'
       },
-      
+      shoulder: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        comment: '어깨 너비'
+      },
+      down_length: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        comment: '다리 길이'
+      },
       waist: {
         type: DataTypes.INTEGER,
         allowNull: true,
