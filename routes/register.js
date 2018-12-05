@@ -164,8 +164,13 @@ router.post('/getinfo', (req, res, next) =>{
     models.User.findOne({
       where:{
         id: req.session.user.id
-      }
+      },
+      attributes: ['id', 'userid', 'uname', 
+      'nickname', 'gender', 'height', 'topsize', 
+      'waist', 'weight', 'photo', 'intro', 
+      'email', 'createdAt']
     }).then(function(user){
+      console.log(user);
       delete user.pw;
       res.send(user);
     });
