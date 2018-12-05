@@ -26,33 +26,18 @@ router.get('/', function(req, res, next) {
 //wishlist 입력
 router.post('/', (req, res, next)=>{
     if (typeof req.session.user !== 'undefined'){
-        models.Wishlist.findAll({
-            where:{
-                uid: req.session.user.id
-            }
-        }).then(function(wishlistnum){
-            let i = 0;
-            while (typeof wishlistnum[i] !== 'undefined')
-                i++;
-            if (i < 5){
-                req.body.uid = req.session.user.id;
-                models.Wishlist.create(req.body).then(function(){
-                    models.Wishlist.findOne({
-                        where: req.body
-                    }).then(function(wishlist){
-                        res.send({
-                            success: true,
-                            wid : wishlist.id
-                        });
-                    });
-                });
-            }else{
-                res.send({
-                    success: false,
-                    text: "위시리스트가 5개를 초과했습니다"
-                });
-            }
+        
+    req.body.uid = req.session.user.id;
+    models.Wishlist.create(req.body).then(function(){
+        models.Wishlist.findOne({
+            where: req.body
+        }).then(function(wishlist){
+            res.send({
+                success: true,
+                wid : wishlist.id
+            });
         });
+    });
         
     }else{
         res.send({
