@@ -23,6 +23,24 @@ router.get('/', function(req, res, next) {
         });
     }
 });
+//wishlist 하나만 불러오기
+router.get('specific/:wid', function(req, res, next) {
+    if (typeof req.session.user !== 'undefined'){
+        models.Wishlist.findOne({
+            where:{
+                uid: req.session.user.id,
+                id: req.params.wid
+            }
+        }).then(function(wishlist){
+            res.send(wishlist);
+        });
+    }else{
+        res.send({
+            success: false,
+            text: "로그인이 안되있습니다"
+        });
+    }
+});
 //wishlist 입력
 router.post('/', (req, res, next)=>{
     if (typeof req.session.user !== 'undefined'){
