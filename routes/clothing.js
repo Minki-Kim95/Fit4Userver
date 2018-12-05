@@ -91,92 +91,48 @@ router.post('/', upload.fields([{name : 'basicimage'},{name : 'image1'},{name : 
     }
 });
 //해당 옷의 상세 정보
-router.get('/specific/:cid', (req, res, next) =>{
-    models.Clothing.findOne({
+router.get('/specific/:cid', async function(req, res, next){
+    let clothing = await models.Clothing.findOne({
         where: {
             id: req.params.cid
         }
-     }).then(function(clothing){
-        if (clothing !== null) {
-            models.Clothing.update(
-                {views: clothing.views + 1},
-                {where: {
-                    id: req.params.cid
-                }}
-            ).then(function(){
-                models.Cloth_like_relation.findAll({
-                    where:{
-                        cid: req.params.cid
-                    }
-                }).then(function(likenum){
-                    var i = 0;
-                    while(typeof likenum[i] !== 'undefined')
-                        i++;
-                    var islike;
-                    if(typeof req.session.user !== 'undefined'){
-                        models.Cloth_like_relation.findOne({
-                            where:{
-                                cid: req.params.cid,
-                                uid: req.session.user.id
-                            }
-                        }).then(function(like){
-                            if(like !== null)
-                                islike = true;
-                            else
-                                islike = false;
-                            res.send({
-                                id: clothing.id,
-                                cname: clothing.cname,
-                                views: clothing.views,
-                                hashtag: clothing.hashtag,
-                                cost: clothing.cost,
-                                link: clothing.link,
-                                season: clothing.season,
-                                mallname: clothing.mallname,
-                                gender: clothing.gender,
-                                basicimage: clothing.basicimage,
-                                photo1: clothing.photo1,
-                                photo2: clothing.photo2,
-                                photo3: clothing.photo3,
-                                createdAt: clothing.createdAt,
-                                uid: clothing.uid,
-                                oid: clothing.oid,
-                                like: i,
-                                islike: islike
-                            });
-                        });
-                    }else{
-                        res.send({
-                            id: clothing.id,
-                            cname: clothing.cname,
-                            views: clothing.views,
-                            hashtag: clothing.hashtag,
-                            cost: clothing.cost,
-                            link: clothing.link,
-                            season: clothing.season,
-                            mallname: clothing.mallname,
-                            gender: clothing.gender,
-                            basicimage: clothing.basicimage,
-                            photo1: clothing.photo1,
-                            photo2: clothing.photo2,
-                            photo3: clothing.photo3,
-                            createdAt: clothing.createdAt,
-                            uid: clothing.uid,
-                            oid: clothing.oid,
-                            like: i,
-                            islike: false
-                        });
-                    }
-                });
+     });
+    if (clothing !== null) {
+        await models.Clothing.update(
+            {views: clothing.views + 1},
+            {where: {
+                id: req.params.cid
+            }}
+        );
+        const likenum = await models.Cloth_like_relation.count({
+            where:{
+                cid: req.params.cid
+            }
+        });
+        clothing.dataValues.like = likenum;
+        if(typeof req.session.user !== 'undefined'){
+            const like = await models.Cloth_like_relation.findOne({
+                where:{
+                    cid: req.params.cid,
+                    uid: req.session.user.id
+                }
             });
-        } else {
-            result = {
-                success: false,
-                text: '존재하지 않는 옷입니다'
-            };
-            res.send(result);
+            if(like !== null)
+                clothing.dataValues.islike = true;
+            else
+                clothing.dataValues.islike = false;
+            res.send(clothing);
+        }else{
+            clothing.dataValues.islike = false;
+            res.send(clothing);
         }
-    }); 
+    } else {
+        result = {
+            success: false,
+            text: '존재하지 않는 옷입니다'
+        };
+        res.send(result);
+    }
 });
 router.post('/modify/:cid',upload.fields([{name : 'basicimage'},{name : 'image1'},{name : 'image2'},{name : 'image3'}] ), (req, res, next)=>{
     console.log(req.files);
