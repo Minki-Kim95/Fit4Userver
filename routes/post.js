@@ -344,7 +344,7 @@ function compareviews(a, b){
         return 0;
 }
 
-//모든 post 정보 줌
+//모든 post 정보 줌(page별)
 router.get('/all/:page/:optionnum', async function(req, res, next){
     // -> page
     // sortoption => optionnum
@@ -426,6 +426,80 @@ router.get('/all/:page/:optionnum', async function(req, res, next){
         
     
     res.send(postgset);
+});
+//모든 post 정보 줌(한번에)
+router.get('/alllist/:optionnum', async function(req, res, next){
+    // sortoption => optionnum
+    // 1: Last->normalcase, 2: Most Liked, 3: Most Views
+
+    // 5개씩 보내기
+    // page 별로 1~5, 6~10, 11~15으로 나누기
+    if (pagenum <= 0){
+        res.send({
+            success: false,
+            text: '페이지 넘버를 똑바로 입력하십시오'
+          });
+    }
+    if(!(req.params.optionnum === '0' ||req.params.optionnum === '1' ||req.params.optionnum === '2' || req.params.optionnum === '3')){
+        res.send({
+            success: false,
+            text: 'optionnumber를 똑바로 줘라'
+          });
+    }
+    const num = await models.Post.count({
+     });
+
+    let post = await models.Post.findAll({
+     });
+     var i = 0
+     while(typeof post[i] !== 'undefined'){
+        //좋아요 수 찾기
+        const likenum = await models.Post_like_relation.count({
+            where: {
+                pid: post[i].id
+            }
+        });
+        post[i].dataValues.like = likenum;
+        if (typeof req.session.user !== 'undefined'){
+            const likeis = await models.Post_like_relation.findOne({
+                where:{
+                    uid: req.session.user.id,
+                    pid: post[i].id
+                }
+            });
+            if(likeis !== null){
+                post[i].dataValues.islike = true;
+            }else if(typeof req.session.user !== 'undefined'){
+                post[i].dataValues.islike = false;
+            }
+        }else{
+            post[i].dataValues.islike = false;
+        }
+        post[i].dataValues.numpost = num;
+        const commentnum = await models.comment.count({
+            where:{
+                pid: post[i].id
+            }
+        });
+        post[i].dataValues.commentnum = commentnum;
+        //키 몸무게
+        const user = await models.User.findOne({
+            where:{
+                id: post[i].uid
+            }
+        });
+        post[i].dataValues.height = user.height;
+        post[i].dataValues.weight = user.weight;
+        i++;
+    }
+    //좋아요순 정렬
+    if (req.params.optionnum === '2')
+        await post.sort(comparelike);
+    //조회수순 정렬
+    if (req.params.optionnum === '3')
+        await post.sort(compareviews);
+
+    res.send(post);
 });
 //유저가 들고있는 post list
 router.get('/user/:page/:uid', async function(req, res, next){
