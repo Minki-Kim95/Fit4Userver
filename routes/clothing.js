@@ -360,7 +360,7 @@ router.post('/modifysize/:sid', async function(req, res, next){
     }else{
         result = {
             success: false,
-            text: '옷정보가 없습니다'
+            text: '사이즈 정보가 없습니다'
         };
         res.send(result);
     }
