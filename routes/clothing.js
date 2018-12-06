@@ -344,6 +344,27 @@ router.post('/addsize', (req, res, next) =>{
         res.send(result);
     }
 });
+router.post('/modifysize/:sid', async function(req, res, next){
+    //input: params: sid, body: sizeinfo
+    let size = await models.Size.findOne({
+        where:{
+            id : req.params.sid
+        }
+    });
+    if(size !== null){
+        await size.updateAttributes(req.body);
+        result = {
+            success: true
+        };
+        res.send(result);
+    }else{
+        result = {
+            success: false,
+            text: '옷정보가 없습니다'
+        };
+        res.send(result);
+    }
+});
 //사이즈 제거
 router.post('/deletesize', (req, res, next) =>{
     //input: id
