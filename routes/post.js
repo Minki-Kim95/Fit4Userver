@@ -139,6 +139,7 @@ router.get('/specific/:pid', async function(req, res, next){
                 id: post.uid
             }
         });
+        post.dataValues.nickname = user.nickname;
         post.dataValues.height = user.height;
         post.dataValues.weight = user.weight;
         if(typeof req.session.user !== 'undefined'){
@@ -407,6 +408,7 @@ router.get('/all/:page/:optionnum', async function(req, res, next){
                 id: post[i].uid
             }
         });
+        post[i].dataValues.nickname = user.nickname;
         post[i].dataValues.height = user.height;
         post[i].dataValues.weight = user.weight;
         i++;
@@ -488,6 +490,7 @@ router.get('/alllist/:optionnum', async function(req, res, next){
                 id: post[i].uid
             }
         });
+        post[i].dataValues.nickname = user.nickname;
         post[i].dataValues.height = user.height;
         post[i].dataValues.weight = user.weight;
         i++;

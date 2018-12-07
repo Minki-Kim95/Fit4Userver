@@ -104,6 +104,13 @@ router.get('/specific/:cid', async function(req, res, next){
                 id: req.params.cid
             }}
         );
+        const user = await models.User.findOne({
+            where:{
+                id: clothing.uid
+            }
+        });
+        clothing.dataValues.nickname = user.nickname;
+
         const likenum = await models.Cloth_like_relation.count({
             where:{
                 cid: req.params.cid
@@ -486,9 +493,13 @@ router.get('/all/:page/:optionnum/:gender/:season', async function(req, res, nex
                 cid: clothing[i].id
             }
         });
-        if (clothing[i].id === 9)
-            console.log(likenum);
         clothing[i].dataValues.like = likenum;
+        const user = await models.User.findOne({
+            where: {
+                id: clothing[i].uid
+            }
+        });
+        clothing[i].dataValues.nickname = user.nickname;
         if (typeof req.session.user !== 'undefined'){
             const likeis = await models.Cloth_like_relation.findOne({
                 where:{
@@ -570,6 +581,12 @@ router.get('/alllist/:optionnum/:gender/:season', async function(req, res, next)
         if (clothing[i].id === 9)
             console.log(likenum);
         clothing[i].dataValues.like = likenum;
+        const user = await models.User.findOne({
+            where: {
+                id: clothing[i].uid
+            }
+        });
+        clothing[i].dataValues.nickname = user.nickname;
         if (typeof req.session.user !== 'undefined'){
             const likeis = await models.Cloth_like_relation.findOne({
                 where:{
@@ -633,6 +650,12 @@ router.get('/user/:page/:uid', async function(req, res, next){
             }
         });
         clothing[i].dataValues.like = likenum;
+        const user = await models.User.findOne({
+            where: {
+                id: clothing[i].uid
+            }
+        });
+        clothing[i].dataValues.nickname = user.nickname;
         if (typeof req.session.user !== 'undefined'){
             const likeis = await models.Cloth_like_relation.findOne({
                 where:{
