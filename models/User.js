@@ -30,12 +30,12 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         comment: '성별 (남자:1 여자:2)'
       },
-      head_horizon: {
+      head_width: {
         type: DataTypes.INTEGER,
         allowNull: true,
         comment: '머리 가로'
       },
-      head_vertical: {
+      head_height: {
         type: DataTypes.INTEGER,
         allowNull: true,
         comment: '머리 세로'

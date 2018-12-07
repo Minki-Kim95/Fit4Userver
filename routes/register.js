@@ -168,7 +168,7 @@ router.post('/getinfo', (req, res, next) =>{
       attributes: ['id', 'userid', 'uname', 
       'nickname', 'gender', 'height', 'shoulder','topsize', 
       'down_length','waist', 'weight', 'photo', 'intro', 
-      'email', 'createdAt']
+      'email','head_width','head_height', 'createdAt']
     }).then(function(user){
       res.send(user);
     });
