@@ -436,12 +436,6 @@ router.get('/alllist/:optionnum', async function(req, res, next){
 
     // 5개씩 보내기
     // page 별로 1~5, 6~10, 11~15으로 나누기
-    if (pagenum <= 0){
-        res.send({
-            success: false,
-            text: '페이지 넘버를 똑바로 입력하십시오'
-          });
-    }
     if(!(req.params.optionnum === '0' ||req.params.optionnum === '1' ||req.params.optionnum === '2' || req.params.optionnum === '3')){
         res.send({
             success: false,

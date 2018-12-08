@@ -540,14 +540,6 @@ router.get('/alllist/:optionnum/:gender/:season', async function(req, res, next)
     // filter: 
     // gender (0: 공용 1: man, 2: woman)
     // season (0: 공용 1:봄,가을 2:여름, 3:겨울)
-    // 5개씩 보내기
-    // page 별로 1~5, 6~10, 11~15으로 나누기
-    if (pagenum <= 0){
-        res.send({
-            success: false,
-            text: '페이지 넘버를 똑바로 입력하십시오'
-          });
-    }
     if(!(req.params.optionnum === '0' ||req.params.optionnum === '1' ||req.params.optionnum === '2' || req.params.optionnum === '3')){
         res.send({
             success: false,
@@ -578,8 +570,6 @@ router.get('/alllist/:optionnum/:gender/:season', async function(req, res, next)
                 cid: clothing[i].id
             }
         });
-        if (clothing[i].id === 9)
-            console.log(likenum);
         clothing[i].dataValues.like = likenum;
         const user = await models.User.findOne({
             where: {
