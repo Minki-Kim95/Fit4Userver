@@ -84,7 +84,7 @@ router.post('/isfollow', (req, res, next)=>{
 router.post('/add', (req, res, next)=>{
     //id_two(uid)
     if (typeof req.session.user !== 'undefined'){
-        if(req.session.user.id !== req.body.id_two){
+        if(req.session.user.id !== parseInt(req.body.id_two)){
             req.body.id_one = req.session.user.id;
             models.User_relation.findOne({
             where:{
