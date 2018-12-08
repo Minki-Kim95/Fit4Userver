@@ -615,17 +615,9 @@ router.get('/alllist/:optionnum/:gender/:season', async function(req, res, next)
     res.send(clothing);
 });
 //유저가 들고있는 clothing list
-router.get('/user/:page/:uid', async function(req, res, next){
+router.get('/user/:uid', async function(req, res, next){
     // -> page
     // 5개씩 보내기
-    // page 별로 1~5, 6~10, 11~15으로 나누기
-    var pagenum = Number(req.params.page);
-    if (pagenum <= 0){
-        res.send({
-            success: false,
-            text: '페이지 넘버를 똑바로 입력하십시오'
-          });
-    }
     const num = await models.Clothing.count({
         where:{
             uid: req.params.uid
@@ -637,9 +629,7 @@ router.get('/user/:page/:uid', async function(req, res, next){
         },
         attributes: ['id', 'cname', 'views', 'hashtag', 'cost',
          'link', 'season', 'mallname', 'gender', 'basicimage',
-          'photo1', 'photo2', 'photo3', 'createdAt', 'uid', 'oid'],
-        offset: 5*pagenum - 5,
-        limit: 5*pagenum
+          'photo1', 'photo2', 'photo3', 'createdAt', 'uid', 'oid']
      });
      var i = 0
      while(typeof clothing[i] !== 'undefined'){
