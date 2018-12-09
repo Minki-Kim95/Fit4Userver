@@ -498,6 +498,128 @@ router.get('/alllist/:optionnum', async function(req, res, next){
 
     res.send(post);
 });
+function comparepoint(a, b){
+    if (a.dataValues.point < b.dataValues.point)
+        return -1;
+    else if(a.dataValues.point > b.dataValues.point)
+        return 1;
+    else
+        return 0;
+}
+
+function comparefollow(a, b){
+    if (a.dataValues.isfollow == true || b.dataValues.isfollow == false)
+        return -1;
+    else if(a.dataValues.isfollow == false || b.dataValues.isfollow == true)
+        return 1;
+    else
+        return 0;
+}
+
+router.get('/recomendation', async function(req, res, next){
+
+    // 로그인한 유저와 체형 비슷한지확인하는 추천 알고리즘
+    // 모든 유저를 불러와서 지금 유저의 체형과 비교(키, 몸무게), 각각의 키와 몸무게의 차이에 점수를 메김
+    // 유저들을 그 기준으로 sorting
+    // 그 유저들의 post를 다 만들어서 table에 push
+    // 그 테이블 send
+
+    if (typeof req.session.user !== 'undefined'){
+        const standard = await models.User.findOne({
+            where:{
+                id: req.session.user.id
+            }
+        });
+        const user = await models.User.findAll({
+
+        });
+        let i = 0;
+        let heightPoint = 0;
+        let weightPoint = 0;
+        while(typeof user[i] !== 'undefined'){
+            const follow = await models.User_relation.findOne({
+                where:{
+                    id_one: req.session.user.id,
+                    id_two: user[i].id
+                }
+            });
+            if (follow !== null)
+                user[i].dataValues.isfollow = true;
+            else
+                user[i].dataValues.isfollow = false;
+            heightPoint = Math.abs(user[i].dataValues.height - standard.height);
+            weightPoint = Math.abs(user[i].dataValues.weight - standard.weight);
+            user[i].dataValues.point = heightPoint + weightPoint;
+            i++;
+        }
+        await user.sort(comparefollow);
+        await user.sort(comparepoint);
+        i = 1;
+        let postlist = [];
+        // if(typeof postlist[0] === 'undefined')
+        //     console.log("QKasdfdfds");
+        while(typeof user[i] !== 'undefined'){
+            const post = await models.Post.findAll({
+                where: {
+                    uid: user[i].id
+                }
+            });
+            var j = 0
+            while(typeof post[j] !== 'undefined'){
+                //좋아요 수 찾기
+                const likenum = await models.Post_like_relation.count({
+                    where: {
+                        pid: post[j].id
+                    }
+                });
+                post[j].dataValues.like = likenum;
+                if (typeof req.session.user !== 'undefined'){
+                    const likeis = await models.Post_like_relation.findOne({
+                        where:{
+                            uid: req.session.user.id,
+                            pid: post[j].id
+                        }
+                    });
+                    if(likeis !== null){
+                        post[j].dataValues.islike = true;
+                    }else if(typeof req.session.user !== 'undefined'){
+                        post[j].dataValues.islike = false;
+                    }
+                }else{
+                    post[j].dataValues.islike = false;
+                }
+                post[j].dataValues.numpost = num;
+                const commentnum = await models.comment.count({
+                    where:{
+                        pid: post[j].id
+                    }
+                });
+                post[j].dataValues.commentnum = commentnum;
+                //키 몸무게
+                const user = await models.User.findOne({
+                    where:{
+                        id: post[j].uid
+                    }
+                });
+                post[j].dataValues.nickname = user.nickname;
+                post[j].dataValues.height = user.height;
+                post[j].dataValues.weight = user.weight;
+                j++;
+            }
+            if(typeof post[0] !== 'undefined')
+                postlist.push(post);
+            i++;
+        }
+
+        res.send(postlist);
+        
+    }else{
+        res.send({
+            success: false,
+            text: '로그인을 하시요'
+          });
+    }
+});
 //유저가 들고있는 post list
 router.get('/user/:uid', async function(req, res, next){
     const num = await models.Post.count({
