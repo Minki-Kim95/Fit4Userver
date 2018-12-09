@@ -165,10 +165,11 @@ router.post('/getinfo', (req, res, next) =>{
       where:{
         id: req.session.user.id
       },
-      attributes: ['id', 'userid', 'uname', 
-      'nickname', 'gender', 'height', 'shoulder','topsize', 
-      'down_length','waist', 'weight', 'photo', 'intro', 
-      'email','head_width','head_height', 'createdAt']
+      attributes: { exclude: ['pw']}
+      // attributes: ['id', 'userid', 'uname', 
+      // 'nickname', 'gender', 'height', 'shoulder','topsize', 
+      // 'down_length','waist', 'weight', 'photo', 'intro', 
+      // 'email','head_width','head_height', 'createdAt']
     }).then(function(user){
       res.send(user);
     });

@@ -68,7 +68,7 @@ router.get('/get/:pid', (req, res, next)=>{
         },
         include:{
             model: models.User,
-            attributes: ['nickname']
+            attributes: ['nickname', 'photo']
         }
     }).then(function(comments){
         if(typeof comments[0] !== 'undefined'){
