@@ -605,8 +605,13 @@ router.get('/recomendation', async function(req, res, next){
                 post[j].dataValues.weight = user.weight;
                 j++;
             }
-            if(typeof post[0] !== 'undefined')
-                postlist.push(post);
+            if(typeof post[0] !== 'undefined'){
+                j = 0
+                while(typeof post[j] !== 'undefined'){
+                    postlist.push(post[j]);
+                    j++;
+                }
+            }
             i++;
         }
 
