@@ -588,7 +588,6 @@ router.get('/recomendation', async function(req, res, next){
                 }else{
                     post[j].dataValues.islike = false;
                 }
-                post[j].dataValues.numpost = num;
                 const commentnum = await models.comment.count({
                     where:{
                         pid: post[j].id
