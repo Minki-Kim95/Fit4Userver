@@ -1,6 +1,18 @@
 # SE team4 Fit4U
 only routing for android App 
 
+# Use Env
+
+GCP
+
+Nodejs
+
+MySql
+
+# OpenSource
+
+Sequelize
+
 # how to use
 
 npm install
