@@ -18,3 +18,9 @@ Sequelize
 npm install
 
 node bin/www
+
+go to
+
+localhost
+
+(this server only use port 80)
