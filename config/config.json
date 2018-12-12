@@ -2,9 +2,9 @@
   "development": {
     "username": "",
     "password": "",
-    "database": "",
-    "host": "",
-    "dialect": ""
+    "database": "fit4you",
+    "host": "35.221.95.96",
+    "dialect": "mysql"
   },
   "test": {
     "username": "",
@@ -16,8 +16,9 @@
   "production": {
     "username": "",
     "password": "",
-    "database": "",
-    "host": "",
-    "dialect": ""
+    "database": "fit4you",
+    "host": "35.221.95.96",
+    "dialect": "mysql"
   }
 }
+
