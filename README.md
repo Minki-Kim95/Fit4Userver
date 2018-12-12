@@ -19,8 +19,6 @@ npm install
 
 node bin/www
 
-go to
-
-localhost
+url: localhost
 
 (this server only use port 80)
