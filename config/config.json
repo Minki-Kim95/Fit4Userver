@@ -1,10 +1,10 @@
 {
   "development": {
-    "username": "kmk",
-    "password": "0123456789",
-    "database": "fit4you",
-    "host": "35.221.95.96",
-    "dialect": "mysql"
+    "username": "",
+    "password": "",
+    "database": "",
+    "host": "",
+    "dialect": ""
   },
   "test": {
     "username": "",
@@ -14,10 +14,10 @@
     "dialect": ""
   },
   "production": {
-    "username": "kmk",
-    "password": "0123456789",
-    "database": "fit4you",
-    "host": "35.221.95.96",
-    "dialect": "mysql"
+    "username": "",
+    "password": "",
+    "database": "",
+    "host": "",
+    "dialect": ""
   }
 }
