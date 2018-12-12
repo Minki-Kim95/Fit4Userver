@@ -498,41 +498,29 @@ router.get('/alllist/:optionnum', async function(req, res, next){
 
     res.send(post);
 });
-function comparepoint(a, b){
-    if (a.dataValues.point < b.dataValues.point)
-        return -1;
-    else if(a.dataValues.point > b.dataValues.point)
-        return 1;
-    else
-        return 0;
-}
 
 function comparepoint(a, b){
-    if (a.dataValues.point < b.dataValues.point)
+    if (a.point < b.point)
         return 1;
-    else if(a.dataValues.point > b.dataValues.point)
+    else if(a.point > b.point)
         return -1;
     else
         return 0;
 }
-
+// 로그인한 유저와 체형 비슷한지확인하는 추천 알고리즘
 router.get('/recomendation', async function(req, res, next){
 
-    // 로그인한 유저와 체형 비슷한지확인하는 추천 알고리즘
-    // 모든 유저를 불러와서 지금 유저의 체형과 비교(키, 몸무게), 각각의 키와 몸무게의 차이에 점수를 메김
-    // 유저들을 그 기준으로 sorting
-    // 그 유저들의 post를 다 만들어서 table에 push
-    // 그 테이블 send
-
+    
     // 평가 항목들 점수 메기기 
     // 키: -+5 안이면 50 5칸씩 늘어날수록 10점 감점 (0이 최소)
     // 몸무게 : -+5 안이면 50 5칸씩 늘어날수록 10점 감점 (0이 최소)
     // 좋아요수: 그 수 * 3 
     // 조회수: 그 수만큼더하기
     // 팔로우 여부: 50
-    // 날짜: 하루마다 -30
+    // 날짜: 하루마다 -15
     // 자기 자신꺼 : 안줌
-
+    const today = new Date();
+    const today_Date = today.getDate();
     if (typeof req.session.user !== 'undefined'){
         const standard = await models.User.findOne({
             where:{
@@ -551,112 +539,83 @@ router.get('/recomendation', async function(req, res, next){
                 i++;
                 continue;
             }
-            let weightpoint = 0;
+            //좋아요 수 찾기
+            const likenum = await models.Post_like_relation.count({
+                where: {
+                    pid: posts[i].id
+                }
+            });
+            posts[i].dataValues.like = likenum;
+            //좋아요 여부
+            const likeis = await models.Post_like_relation.findOne({
+                where:{
+                    uid: req.session.user.id,
+                    pid: posts[i].id
+                }
+            });
+            if(likeis !== null)
+                posts[i].dataValues.islike = true;
+            else 
+                posts[i].dataValues.islike = false;
+            //댓글갯수
+            const commentnum = await models.comment.count({
+                where:{
+                    pid: posts[i].id
+                }
+            });
+            posts[i].dataValues.commentnum = commentnum;
             //해당 post를 올린 유저의 id
             const postuser = await models.User.findOne({
-                id: posts[i].dataValues.uid
+                where:{
+                    id: posts[i].uid
+                }
             });
+            //키 몸무게
+            posts[i].dataValues.nickname = postuser.nickname;
+            posts[i].dataValues.height = postuser.height;
+            posts[i].dataValues.weight = postuser.weight;
+            
+            let point = 0;
+            let heightpoint = 0;
+            let weightpoint = 0;
             // 키: -+5 안이면 50 5칸씩 늘어날수록 10점 감점 (0이 최소)
             // 몸무게 : -+5 안이면 50 5칸씩 늘어날수록 10점 감점 (0이 최소)
             heightInterval = Math.abs(postuser.height - standard.height);
             weightInterval = Math.abs(postuser.weight - standard.weight);
-            weightpoint = 50 - 10 * (heightInterval / 5)
-            console.log(heightInterval);
-            console.log(weightInterval);
-            
+            heightpoint = 50 - 10 * parseInt(heightInterval / 5);
+            weightpoint = 50 - 10 * parseInt(weightInterval / 5);
+            if (heightpoint < 0)
+                heightpoint = 0;
+            if (weightpoint < 0)
+                weightpoint = 0;
+            point = heightpoint + weightpoint;
             // 좋아요수: 그 수 * 3 
+            point = point + 3 * likenum;
             // 조회수: 그 수만큼더하기
+            point = point + posts[i].views;
             // 팔로우 여부: 50
-            // 날짜: 하루마다 -30
-            postlist.push(posts[i].dataValues);
+            const follow = await models.User_relation.findOne({
+                where:{
+                    id_one: req.session.user.id,
+                    id_two: postuser.id
+                }
+            });
+            if (follow !== null){
+                point = point + 50;
+                posts[i].dataValues.isfollow = true;
+            }else
+                posts[i].dataValues.isfollow = false;
+            // 날짜: 하루마다 -15
+            const dateInterval = today_Date - posts[i].createdAt.getDate();
+            point = point - 15 * dateInterval;
+            
+            posts[i].dataValues.point = point;
+            await postlist.push(posts[i].dataValues);
             i++;
         }
-        res.send(postlist);
         //점수 기준으로 sorting
-
-        // let i = 0;
-        // let heightPoint = 0;
-        // let weightPoint = 0;
-        // while(typeof user[i] !== 'undefined'){
-        //     const follow = await models.User_relation.findOne({
-        //         where:{
-        //             id_one: req.session.user.id,
-        //             id_two: user[i].id
-        //         }
-        //     });
-        //     if (follow !== null)
-        //         user[i].dataValues.isfollow = true;
-        //     else
-        //         user[i].dataValues.isfollow = false;
-        //     heightPoint = Math.abs(user[i].dataValues.height - standard.height);
-        //     weightPoint = Math.abs(user[i].dataValues.weight - standard.weight);
-        //     user[i].dataValues.point = heightPoint + weightPoint;
-        //     i++;
-        // }
-        // await user.sort(comparefollow);
-        // await user.sort(comparepoint);
-        // i = 1;
-        // let postlist = [];
-        // // if(typeof postlist[0] === 'undefined')
-        // //     console.log("QKasdfdfds");
-        // while(typeof user[i] !== 'undefined'){
-        //     const post = await models.Post.findAll({
-        //         where: {
-        //             uid: user[i].id
-        //         }
-        //     });
-        //     var j = 0
-        //     while(typeof post[j] !== 'undefined'){
-        //         //좋아요 수 찾기
-        //         const likenum = await models.Post_like_relation.count({
-        //             where: {
-        //                 pid: post[j].id
-        //             }
-        //         });
-        //         post[j].dataValues.like = likenum;
-        //         if (typeof req.session.user !== 'undefined'){
-        //             const likeis = await models.Post_like_relation.findOne({
-        //                 where:{
-        //                     uid: req.session.user.id,
-        //                     pid: post[j].id
-        //                 }
-        //             });
-        //             if(likeis !== null){
-        //                 post[j].dataValues.islike = true;
-        //             }else if(typeof req.session.user !== 'undefined'){
-        //                 post[j].dataValues.islike = false;
-        //             }
-        //         }else{
-        //             post[j].dataValues.islike = false;
-        //         }
-        //         const commentnum = await models.comment.count({
-        //             where:{
-        //                 pid: post[j].id
-        //             }
-        //         });
-        //         post[j].dataValues.commentnum = commentnum;
-        //         //키 몸무게
-        //         const user = await models.User.findOne({
-        //             where:{
-        //                 id: post[j].uid
-        //             }
-        //         });
-        //         post[j].dataValues.nickname = user.nickname;
-        //         post[j].dataValues.height = user.height;
-        //         post[j].dataValues.weight = user.weight;
-        //         j++;
-        //     }
-        //     if(typeof post[0] !== 'undefined'){
-        //         j = 0
-        //         while(typeof post[j] !== 'undefined'){
-        //             postlist.push(post[j]);
-        //             j++;
-        //         }
-        //     }
-        //     i++;
-        // }
-
-        // res.send(postlist);
+        await postlist.sort(comparepoint);
+        res.send(postlist);
         
     }else{
         res.send({
