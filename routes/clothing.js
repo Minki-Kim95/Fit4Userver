@@ -1,5 +1,4 @@
 var express = require('express');
-var config = require('../config/config.json')[process.env.NODE_ENV || "development"];
 var models = require('../models');
 var router = express.Router();
 //multer
