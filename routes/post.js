@@ -412,6 +412,9 @@ router.get('/all/:page/:optionnum', async function(req, res, next){
         post[i].dataValues.weight = user.weight;
         i++;
     }
+    //최신순 조회
+    if (req.params.optionnum === '0' || req.params.optionnum === '1')
+        await post.reverse();
     //좋아요순 정렬
     if (req.params.optionnum === '2')
         await post.sort(comparelike);
@@ -488,6 +491,9 @@ router.get('/alllist/:optionnum', async function(req, res, next){
         post[i].dataValues.weight = user.weight;
         i++;
     }
+    //최신순 조회
+    if (req.params.optionnum === '0' || req.params.optionnum === '1')
+        await post.reverse();
     //좋아요순 정렬
     if (req.params.optionnum === '2')
         await post.sort(comparelike);
@@ -669,6 +675,8 @@ router.get('/user/:uid', async function(req, res, next){
         post[i].dataValues.commentnum = commentnum;
         i++;
     }
+    //최신순 조회
+    await post.reverse();
     res.send(post);
 });
 

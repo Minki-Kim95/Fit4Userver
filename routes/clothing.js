@@ -549,6 +549,9 @@ router.get('/all/:page/:optionnum/:gender/:season', async function(req, res, nex
         clothing[i].dataValues.numclothing = num;
             i++;
     }
+    //최신순 조회
+    if (req.params.optionnum === '0' || req.params.optionnum === '1')
+        await clothing.reverse();
     //좋아요순 정렬
     if (req.params.optionnum === '2')
         await clothing.sort(comparelike);
@@ -660,6 +663,9 @@ router.get('/alllist/:optionnum/:gender/:season', async function(req, res, next)
         clothing[i].dataValues.numclothing = num;
             i++;
     }
+    //최신순 조회
+    if (req.params.optionnum === '0' || req.params.optionnum === '1')
+        await clothing.reverse();
     //좋아요순 정렬
     if (req.params.optionnum === '2')
         await clothing.sort(comparelike);
@@ -719,6 +725,7 @@ router.get('/user/:uid', async function(req, res, next){
         clothing[i].dataValues.numclothing = num;
         i++;
     }
+    await clothing.reverse();
 
     res.send(clothing);
 });
