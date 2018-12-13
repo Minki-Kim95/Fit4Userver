@@ -522,7 +522,7 @@ router.get('/recomendation', async function(req, res, next){
     // 좋아요수: 그 수 * 3 
     // 조회수: 그 수만큼더하기
     // 팔로우 여부: 50
-    // 날짜: 하루마다 -15
+    // 날짜: 하루마다 -10
     // 자기 자신꺼 : 안줌
     const today = new Date();
     const today_Date = today.getDate();
@@ -610,9 +610,9 @@ router.get('/recomendation', async function(req, res, next){
                 posts[i].dataValues.isfollow = true;
             }else
                 posts[i].dataValues.isfollow = false;
-            // 날짜: 하루마다 -15
+            // 날짜: 하루마다 -10
             const dateInterval = today_Date - posts[i].createdAt.getDate();
-            point = point - 15 * dateInterval;
+            point = point - 10 * dateInterval;
             
             posts[i].dataValues.point = point;
             await postlist.push(posts[i].dataValues);
