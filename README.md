@@ -46,6 +46,6 @@ localhost
 ```
 **how to check routing**
 ```
-localhost를 이용하거나 소스코드를 다운받지 않는 경우 fit4u.tk를 이용하면된다.
+로컬에서 확인하는 경우는 localhost를 이용하며 실제로 안드로이드 앱은 fit4u.tk를 이용하고 있다.
 그리고 ./doc/REST Doc.xlsx 파일의 라우팅 정보를 통해서 일정한 input 값을 넣고 값을 받으면 된다.
 ```
