@@ -27,8 +27,9 @@ sha256: DB상에 유저의 비밀번호를 암호화하여 저장하기 위해 �
 # how to use
 
 **fill the /configs/config.json by server and DB's user information**
+```
 `./configs/config.json`
-
+```
 **Install all dependencies**
 ```
 npm install
@@ -44,5 +45,6 @@ localhost
 **how to check routing**
 ```
 localhost를 이용하거나 소스코드를 다운받지 않는 경우 fit4u.tk를 이용하면된다.
-그리고 'doc/REST Doc.xlsx' 파일의 라우팅 정보를 통해서 일정한 input 값을 넣고 값을 받으면 된다.
+그리고 REST Doc.xlsx 파일의 라우팅 정보를 통해서 일정한 input 값을 넣고 값을 받으면 된다.
 ```
+'./doc/REST Doc.xlsx'
