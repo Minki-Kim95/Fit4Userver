@@ -4,6 +4,7 @@ This is only BackEnd code for android App Fit4U
 Front: [Android APP source code](https://github.com/kuk941025/Fit4YouAndroid)
 
 BackEnd URL: http://fit4u.tk/  (received domain name from freenom site)
+* server shutdown now *
 
 # Use Env
 
